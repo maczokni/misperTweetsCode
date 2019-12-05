@@ -1,0 +1,15 @@
+\name{cleanMisperData}
+\alias{cleanMisperData}
+\title{Clean missing persons data}
+\usage{
+cleanMisperData(misper_tweets)
+}
+\description{
+This function cleans the data by removing duplicates, and by cleaning up any errors in manual tagging
+ It also codes the gender and ethnic appearance based on photo or text where photo is not available
+ and creates any new variables required for the analysis such as post length, etc
+}
+\examples{
+cleanMisperData(read.csv("misper_tweets.csv"))
+}
+

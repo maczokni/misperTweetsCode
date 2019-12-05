@@ -1,0 +1,4 @@
+exportPattern("^[[:alpha:]]+")
+importFrom(magrittr,"%>%")
+importFrom(tidytext,"unnest_tokens")
+importFrom(tidytext,"get_sentiments")
