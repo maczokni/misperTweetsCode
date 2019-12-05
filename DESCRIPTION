@@ -4,9 +4,7 @@ Title: This Package Contains All the Code Used for the Paper 'Exploring public e
 Version: 0.1.0
 Author: Reka Solymosi
 Maintainer: The package maintainer <maczokni@gmail.com>
-Description: This contains the code for all the data wrangling, visualisation, and analysis for the paper titled 'Exploring public engagement with missing person appeals on Twitter.'
-    This paper is the outcome of a project funded by the Manchester Statistical Society's Campion Grant.
-    Use four spaces when indenting paragraphs within the Description.
+Description: This contains the code for all the data wrangling, visualisation, and analysis for the paper titled 'Exploring public engagement with missing person appeals on Twitter.' This paper is the outcome of a project funded by the Manchester Statistical Society's Campion Grant. Use four spaces when indenting paragraphs within the Description.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
