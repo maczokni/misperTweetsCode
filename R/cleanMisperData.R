@@ -44,16 +44,16 @@ cleanMisperData <- function(misper_tweets){
   #CREATE VARIABLES FOR GENDER
   #code gender from photo or text where no photo was available
   misper_tweets$gender_coded <- NA
-  misper_tweets$gender_coded <- ifelse(grepl("F", misper_tweets$gender_picture), "Female", misper_tweets$gender_coded)
-  misper_tweets$gender_coded <- ifelse(grepl("M", misper_tweets$gender_picture) , "Male", misper_tweets$gender_coded)
+  misper_tweets$gender_coded <- ifelse(grepl("F", misper_tweets$gender_picture), "female", misper_tweets$gender_coded)
+  misper_tweets$gender_coded <- ifelse(grepl("M", misper_tweets$gender_picture) , "male", misper_tweets$gender_coded)
   misper_tweets$gender_coded <- ifelse(grepl(",", misper_tweets$gender_picture)  , "multippl", misper_tweets$gender_coded)
   misper_tweets$gender_coded <- ifelse(grepl("N.P", misper_tweets$gender_picture) |
                                          #   grepl(",", misper_tweets$gender_picture) |
                                          misper_tweets$gender_picture == "" |
                                          misper_tweets$gender_picture == "N.P", NA, misper_tweets$gender_coded)
 
-  misper_tweets$gender_coded <- ifelse(is.na(misper_tweets$gender_coded) & grepl("F", misper_tweets$gender_text), "Female", misper_tweets$gender_coded)
-  misper_tweets$gender_coded <- ifelse(is.na(misper_tweets$gender_coded) & grepl("M", misper_tweets$gender_text), "Male", misper_tweets$gender_coded)
+  misper_tweets$gender_coded <- ifelse(is.na(misper_tweets$gender_coded) & grepl("F", misper_tweets$gender_text), "female", misper_tweets$gender_coded)
+  misper_tweets$gender_coded <- ifelse(is.na(misper_tweets$gender_coded) & grepl("M", misper_tweets$gender_text), "male", misper_tweets$gender_coded)
 
   #create variable for photo type
   #code photo as either no photo, custody photo, normal photo, multiple photos
