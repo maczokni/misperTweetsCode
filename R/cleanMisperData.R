@@ -61,7 +61,6 @@ cleanMisperData <- function(misper_tweets){
   misper_tweets$phototype <- ifelse(grepl('N.P', misper_tweets$image_type), "No photo", misper_tweets$phototype)
   misper_tweets$phototype <- ifelse(grepl(paste0('^([0-9])', ' photos'), misper_tweets$image_type), "Muliple photos", misper_tweets$phototype)
   misper_tweets$phototype <- ifelse(grepl('custody', misper_tweets$image_type), "Custody photo", misper_tweets$phototype)
-  table(misper_tweets$phototype)
   misper_tweets$phototype <- factor(misper_tweets$phototype, levels = c("No photo", "Custody photo", "Regular photo", "Muliple photos"))
 
   #create variable for photo quality
@@ -154,7 +153,7 @@ cleanMisperData <- function(misper_tweets){
     tidytext::unnest_tokens(word, text, drop = FALSE) %>%
     dplyr::inner_join(tidytext::get_sentiments("afinn")) %>%
     dplyr::group_by(text) %>%
-    dplyr::summarise(sent_score = sum(value, na.rm = T))
+    dplyr::summarise(sent_score = ifelse( "value" %in% colnames(.), sum(value, na.rm = T), sum(score, na.rm = T)))
 
   misper_tweets <- dplyr::left_join(misper_tweets, sent, by = c("text" = "text"))
 

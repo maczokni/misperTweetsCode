@@ -1,14 +1,18 @@
 \name{cleanMisperData}
-\alias{cleanMisperData}
 \title{Clean missing persons data}
+\alias{cleanMisperData}
 \usage{
 cleanMisperData(misper_tweets)
+}
+\arguments{
+  \item{misper_tweets}{a data set of missing persons tweets with all variables coded manually}
 }
 \description{
 This function cleans the data by removing duplicates, and by cleaning up any errors in manual tagging
  It also codes the gender and ethnic appearance based on photo or text where photo is not available
  and creates any new variables required for the analysis such as post length, etc
 }
+
 \examples{
 misper_tweets <- tibble::tribble(
   ~user_id, ~created_at, ~screen_name, ~text, ~favorite_count, ~retweet_count, ~hashtags, ~followers_count, ~account_created_at, ~sentiment, ~hashtag_type, ~image_type, ~image_quality, ~tone_type_of_appeal, ~originiality, ~useful_information, ~gender_text, ~gender_picture, ~race_text, ~race_picture,

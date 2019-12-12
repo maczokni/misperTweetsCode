@@ -1,18 +1,22 @@
 \name{cleanImgQual}
-\alias{cleanImgQual}
 \title{Clean image quality tagging}
-\usage{
-cleanMisperData(misper_tweets)
-}
 \description{
 This function cleans the tagging of image quality that was done manually
 }
+\alias{cleanImgQual}
+\usage{
+cleanImgQual(x)
+}
+\arguments{
+  \item{x}{a string representing the image quality that has been manually coded}
+}
+
 \examples{
-misper_tweets <- tibble::tribble(
+df <- tibble::tribble(
   ~image_quality,
   "good",
    "N.P"
 )
- misper_tweets$image_quality_coded <- sapply(misper_tweets$image_quality, cleanImgQual)
+ df$image_quality_coded <- sapply(df$image_quality, cleanImgQual)
 }
 
