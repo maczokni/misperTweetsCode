@@ -1,0 +1,1026 @@
+---
+title: "Exploring public engagement with missing person appeals on Twitter"
+author:
+  - Reka Solymosi:
+      email: reka.solymosi@manchester.ac.uk
+      institute: uom
+      correspondence: true
+  - name: Oana Petcu
+    institute: uom
+  - name: Jack Wilkinson
+    institute: uom2
+institute:
+  - uom: School of Social Sciences, University of Manchester, UK
+  - uom2: Centre for Biostatistics, University of Manchester, UK
+date: ""
+output: 
+  word_document:
+    toc: no
+    pandoc_args:
+      - '--lua-filter=scholarly-metadata.lua'
+      - '--lua-filter=author-info-blocks.lua'
+  pdf_document: 
+    number_sections: no
+    toc: no
+    pandoc_args:
+      - '--lua-filter=scholarly-metadata.lua'
+      - '--lua-filter=author-info-blocks.lua'
+bibliography: ["misper_refs.bib","packages.bib"]
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+
+#suppress scientific notation, round all numbers to whole numbers
+options(scipen=999, digits=0)
+```
+
+```{r loadlibs}
+#this library is available on github you can download with devtools::install_github("maczokni/misperTweetsCode")
+library(misperTweetsCode)
+#these libraries are all available from Cran
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(lubridate)
+library(ggrepel)
+library(scales)
+```
+
+
+# Abstract
+
+Police agencies globally are seeing an increase in reports of people going missing. These people are often vulnerable, and their safe and early return is a key factor in preventing them from coming to serious harm. One approach to quickly find missing people is to disseminate appeals for information using social media. Yet despite the popularity of twitter-based missing person appeals, presently little is known about how to best construct these messages to ensure they are shared far and wide. This paper aims to build an evidence-base for understanding how police accounts tweet appeals for information about missing persons, and how the public engage with these tweets by sharing them. We analyse 1,008 Tweets made by Greater Manchester Police between the period of 2011 and 2018 in order to investigate what features of the tweet, the twitter account, and the missing person are associated with levels of retweeting. We find that tweets with different choice of image, wording, sentiment, and hashtags vary in how much they are retweeted. Tweets that use custody images have lower retweets than Tweets with regular photos, while tweets asking the question “have you seen...?” and asking explicitly to be retweeted have more engagement in the form of retweets. These results highlight the need for conscientious, evidence-based crafting of missing appeals, and pave the way for further research into the causal mechanisms behind what affects engagement, to develop guidance for police forces worldwide.
+
+# Introduction
+
+In the United Kingdom, a missing person is defined as a person of any age whose whereabouts cannot be established. A person is considered missing until they are located, and their well-being or otherwise is confirmed [@cop2019]. Going missing is associated with vulnerabilities such as mental health [@stevenson2013geographies] and Alzheimers in adults [@pmckrb12], and criminal and sexual exploitation in children [@s16; @williams19] particularly those who are often already more vulnerable due to being in care [@bmw03]. The longer people are missing, the greater their exposure to negative outcomes such as criminal exploitation, violent victimisation, or suicidal thoughts [@bmw03; @r11], so finding them as soon as possible can reduce these risks. 
+
+The task of finding missing people usually falls to police agencies. In England, missing persons investigations are a bigger cost to police resources than either theft or assault [@shalev2013cost]. In Canada, “compassionate to locate” is the second highest frequency call from citizens to police [@e16]. Despite its prevalence, missing persons is not a common area for academic research (compared for example with research on crimes such as domestic violence); a search on BASE (Bielefeld Academic Search Engine - one of the most popular multidisciplinary academic search engines) returns 1,020 hits (out of 154,859,846 documents) for the terms “missing person” or “missing people, compared to 33,069 hits for the terms “domestic violence” or “domestic abuse”. 
+
+At least 20% of those reported missing are not found within 24 hours, and require police intervention to be located, or their welfare (or otherwise) confirmed [@fsw15]. Many police agencies are struggling to cope with the high demands that missing persons investigations create. In the UK, police are no longer required to respond to cases assessed as low-risk [@fsw15], while in the United States, volunteer programmes have been established to help local police agencies tackle the increasing volume of missing persons cases [@a18]. As the number of missing people continues to rise each year [@a19], it is important that police and agencies in search of missing people apply evidence based techniques to make the best use of limited resources in a constrained environment [@c13; @gsm13]. 
+
+One approach that is used to locate missing persons is to make appeals for information using social media. A missing person appeal is “communication by those searching for the missing person to a wider network of people who may be able to help locate that person and to the missing person directly” [@h16, pp. 20]. While a media appeal can be regarded by the police as 'being seen to be doing something', it can actually be one of the most important parts of a missing persons enquiry for the police [@fsw15]. If these appeals reach far and wide, they may be seen by either someone with information, or the missing person [@h16]. One study, using a case-control design, even suggests that having tweets posted by police departments can increase the chance of a missing person being found [@tcczlm18]. For the appeals to reach those who may be able to help, they must be widely shared [@lampinen2012power; @tcczlm18]. Yet there is little research on what police can do to promote public engagement and ensure wide sharing. Such an understanding can serve to inform good practice, and maximise the spread of these messages, ultimately contributing to locating missing people, thereby minimising their exposure to associated harms. 
+
+In what follows, we consider the available literature on what is known about the public's engagement with social media communications about missing persons. We combine research on Twitter and social media engagement more broadly with research on missing persons appeals in other social and traditional media. We use this review to inform a targeted and purposeful exploration of features we can expect to impact on public engagement with missing persons appeals. We then take a sample of 1,008 tweets about missing persons made by Greater Manchester Police to explore these features and their associations with number of retweets. Our results constitute the first empirical examination of these appeals. We explore the ways in which these appeals are structured, and the implications that factors such as wording, photo choice, and use of social media-specific features such as hashtags may have for public engagement. In our discussion, we draw conclusions about future directions for research to inform good practice in social media appeals for missing persons.  
+
+# Police strategies on social media
+
+Police forces across the globe have been making increasing use of social media platforms such as Youtube, Facebook, and Twitter [@c11; @dhtgg17].  As consumers, they benefit from members of the public sharing information [@ehha]. As content creators, police benefit from increased accessibility and in cases even improved reputation in local communities [@fca14]. However social media can also be perceived to contain a lot of disinformation and may foster uncertainty [@kwon2016social], so it is important that police use social media in a way that fosters engagement and trust. In fact, some research findings suggest that the quality of a police department’s media image might have more to do with how they present themselves (including on social media) than with the actual crime rates in their municipality [@l01]. 
+
+There is a lot of variation in how the police use social media (@c11). While some guidance exists (eg in the UK the Association for Chief of Police have produced a ‘Guidelines on the Safe use of the Internet and Social Media’ [@acpo2013], their implementation is far from uniform across (or even within) forces. In a study comparing Greater Manchester Police (GMP) and London Metropolitan Police (Met) using Twitter during the 2011 riots, @dbk13 identified differences such as using an instrumental versus an effective tone, or replying to tips from the public with a ‘thanks’ (GMP) or not (Met). As a result, people favoured the way in which GMP handled communication, and responded less to the approach taken by the Met. This manifested not only in discussion but also in directly measurable outcomes such as number of followers [@dbk13]. @c11 identified a UK based typology for police Twitter accounts: ‘broadcasters’ (who share information), ‘local knowledge gatherers’ (who share information), and ‘community facilitators’ (who foster dialogue). Such typologies exist internationally;  research in the United States has identified different strategies between forces depending on whether they used it to broadcast, collect intelligence, or for communication and engagement [@mt13]. Clearly there are many strategies to social media use by police and its important that we understand how these apply to missing appeals and public engagement.
+
+
+
+# Engagement with Twitter
+
+In this section we review the literature about what is known to be associated with people’s engagement with tweets, to inform our feature selection for this study.
+
+## Features of the missing person
+
+First, in the case of appeals for information about missing persons, it is known that certain factors, ranging from demographic characteristics of the person (race, economic background), newsroom resources, and amount of information that is released by the police all affect media coverage of missing persons [@a10]. While these factors cannot be changed, they are important to understand, so coverage can be increased (where appropriate), and so these can be considered when composing such appeals. 
+
+Age of a missing person affects media coverage where younger missing persons are represented in the media more than older ones [@jp17]. Race of the missing person seems to be indicative of coverage. In the USA, [@vssb18] found that non-black children are significantly more likely to receive coverage than non-white children. In Canada, @g10 found missing aboriginal women received 3.5 times less coverage than white women. Gender is also important, whereby missing girls, are less likely to be in the news than missing boys [@min2010missing]. However, intersectionality must be considered, as @a10 found that appeals of women of certain race receive more civil engagement than men. 
+Featu
+
+## Features of the tweet 
+
+Time and timeliness of a tweet may be a factor. Looking at police use of social media in Spain, @fca14 found that tweets between 8am-4pm have more retweets. Others note that tweets sent on the day of a key event (eg protest, music festival, riot) are associated with more retweets than tweets sent before or after [@sef15; @xz18]. Structurally, the length of post is positively associated with retweets; posts with more words are more likely to get engagement [@fca14; @xz18]. Punctuation can also make a difference; tweets that end in question marks are more likely to get retweeted than those which end in exclamation marks [@ngkc11]. The use of hashtags shows mixed results. Some studies find hashtags increase retweeting [@shpc10; @jenders2013analyzing; @sef15;@vmh15], while others claim the opposite [@l14; @tcczlm18]. @shpc10 propose that some hashtags get more retweets than others, so the content of each hashtag as well as the number is important to consider. Other templates or key phrases that seemed to make a difference  were including a hyperlink/URL [@zarrella2009social; @shpc10; @raa111; @raa112; @vmh15; @xz18; @chbg10], expressing gratitude, or asking explicitly to be shared ("please RT") [@l14].  
+
+Sentiment of the tweet also makes a difference for retweetability. Some studies find that messages with positive sentiment increased retweetability [@fca14; @khhh16; @sef15] and content with negativity discourages retweeting behaviour [@xz18], while others found tweets with negative emotions more likely to be shared [@chen2013].  @xz18 found that both negative and positive emotion tweets received more retweets than neutral, and @chen2013 found that feelings of  “alarmed” and “stressed” were also associated with sharing. @fy15 found that negative or neutral messages spread faster than positive ones, but positive messages spread broader, and are favourited more. They also found that feelings of “confused”, “nothing”, “indifferent”, “uninterested”, or “neutral” were less likely to encourage retweeting [@chen2013]. We can see that sentiment affects engagement, although it is not obvious what the effects will be. 
+
+Studies looking into tone of voice found that content with confident, authentic, informal, and powerful language have higher retweetability [@vmh15; @xz18]. Calls-to-action also increase retweeting  [@l14]. Specifically for police engagement on social media, @dbk13 found using a ‘human approach’ in communication with public was appreciated. Many studies consider emotional compared to rational tone tweets. By ‘rational’ we mean that we consider these tweets to be factual or unemotive. We use the term ‘rational’ as this is consistent with the cited literature. @xz18 find emotional language has higher retweetability, while @l14 concludes that emotional content is least likely to be retweeted. In any case tone is important to consider. 
+
+Finally the inclusion of useful information has been associated with increased retweets [@l14], and the inclusion of photos is important both for retweeting [@l14; @ch18; @xz18] and for people being able to identify the missing person in the case of such an appeal [@tcczlm18]. It is important not only that there is an image, but positive valence associated with the image [@sef15]. 
+
+## Features of the account
+
+Besides tweet content, features of the account might influence numbers of retweets. Number of followers has been positively associated with retweets [@shpc10; @hdd11; @chbg10; @jenders2013analyzing; @khhh16; @sef15; @vmh15; @xz18], while the age of the account is negatively related to retweets [@shpc10; @vmh15]. The number of tweets from each account shows mixed effects, either showing no significant relationship [@shpc10], more posts associated with lower odds of being retweeted [@vmh15], or more posts associated with more followers and therefore more retweets[@c11]. A key factor in people sharing information on Twitter is whether they believe it to be from a trusted source [@tbjyg], for example an account of someone in a position of authority such as the police. Because people know the source, they are more likely to trust the validity of the information, and ultimately share tweets [@jg19]. Since police sharing of appeals has such importance [@tcczlm18], we consider tweets from police accounts.
+
+
+Table 1 summarises the features identified by previous literature as important. 
+
+```{r litsum}
+
+litsum <- data.frame(Element = c("Features of the missing person", "Features of the tweet", "Features of the account"),
+                     Feature = c("Race/ ethnic appearance, Gender, Age",
+                                "Time and timeliness, Post length, Punctuation and hashtags, Templates, Sentiment, Tone, Useful information, Photo (presence and valence)",
+                                "Number of followers, Age of account, Tweeting activity, Trusted source"))
+
+knitr::kable(litsum, caption = "Table 1: features in the literature")
+
+
+```
+
+
+
+
+
+
+
+
+# Methods
+
+## Analysis
+
+To achieve this, we present descriptive analysis, comprising numerical and graphical summaries  of 1,008 tweets made by Greater Manchester Police. Additionally, to account for exposure (since the tweets had been “out there” to be retweeted for different lengths of time) we perform an additional multivariable analysis, in which we include all features in a Poisson regression model [@h14]. This allows us to account for the varying levels of exposure (age) of the tweets by introducing it as an offset term [@ygfw09]. Further, as there is evidence of overdispersion in our model, we use a model with scaled standard error (overdispersed Poisson model). We stress that the model is intended to be descriptive, exploratory, and associational only, as our data do not allow us to elucidate the causal relationships between features and outcome. We discuss this more in the next section, and in our discussion. 
+
+
+We focus on Twitter partially because of the relative ease of accessing publicly available data about the sharing of these appeals, and partly because Twitter is a particularly useful platform for widely circulating and sharing information [@khhh16]. While different platforms may behave differently, previous research suggests that there may be not too much of a difference in sharing behaviour between those who use Facebook and those on Twitter [@jg19]. We chose police Twitter accounts due to the high credibility as discussed above, and narrowed the study to focus on Greater Manchester Police, as they have been identified as effective communicators via Twitter by previous work (see @dbk13). Further, the area they police is particularly affected by missing persons. Greater Manchester have the highest rate for missing adults(3.7 per 1,000 population), and second highest rate for missing children (6 per 1,000 population) [@a17] in the UK. It was therefore an ideal sample of tweets to consider for this research, from which implications can be adopted to police forces as well as other agencies involved with missing persons appeals nationally and internationally.  
+
+
+## Data
+
+To collect data, 56 Greater Manchester Police Twitter accounts were identified [@p19]. For each account, their most recent 3200 tweets (the maximum allowed by the free Twitter Application Programme Interface (API)) were queried using the Twitter API. As not all accounts had this many tweets, we collected a database of 169,438 tweets. From this, tweets that contain the words “missing”, “last seen” or “searching” were programmatically queried. A preliminary reading of all tweets revealed at least one of these terms to be included in all tweets about missing persons. This resulted in 3,239 tweets, which were further filtered manually, with a coder eliminating duplicates and tweets not about missing persons (missing pet, found person, other topic).  This resulted in a final dataset of 1,008 unique appeals for information about missing persons made between 1st September 2011 and 10th January 2019 (date of data collection). 
+
+
+There are a few issues to note about our sample. First, the day of data collection was arbitrarily selected, and provides only a cross sectional picture of retweets into missing persons appeals. Secondly, it is general guidance for police Twitter accounts to remove appeals once the person is found. Since these deleted tweets do not form part of our sample and deletion is associated with a person being found, and since our examined features may influence the likelihood that a person is found, our sample is subject to selection bias. The extent and influence of this cannot be known from the sample. However, we found that our sample contained appeals about people who had since been found. We cannot know how many, as we have no reference data set of actual outcomes for the missing persons, so we cannot know how this affects who is and is not present in our sample (found or still missing). Consequently, we do not attempt to draw strong causal conclusions from the data, but offer a descriptive analysis, providing insight into police tweeting and public engagement behaviours, building a foundation of empirical evidence to inform future prospective studies.
+
+
+## Coding
+
+
+To operationalise the factors associated with retweeting, we used manual coding and automated feature extraction, driven by our literature review. Our aim was to explore the volume of retweets for these different features by coding them in the tweets. For manual coding, a codebook was developed to guide to coding process [@gmn11]. A single independent coder coded the tweets for each of the variables in the code book. In some cases, the coding was a matter of extracting values from the text or categorising images into groups. When coding for sentiment, tone, template, and hashtag type, coding followed a thematic analysis process, whereby tweets which followed similar structures or conveyed similar meanings, were identified and labeled with codes [@gl04] to identify key themes and categories [@sc18].  Once the primary coder had finished coding, the secondary coder reviewed the codes to assess the connection between the raw text and codes  [@gmn11]. Then a feedback discussion between the two coders was used to revise definitions and recode where necessary  [@gmn11]. Below we describe in detail the coding of all our variables. 
+
+###  Features of the missing person
+
+The missing person's gender appearance was coded from the photo where available. Where no photo was available, but gender was mentioned in the text of tweet, this was extracted. For race, we considered ethnic appearance, coded from the photo where available. Like with gender, race of the missing person was coded from the text where no photo was available. Due to the difficulty of inferring age from often low quality photos, we did not consider age in this analysis.
+
+### Features of the tweet
+
+#### Time - Age of tweet, time of tweet, hist
+
+To code for time of tweet we extracted the hour of day when the tweet was created through the Twitter API. For timeliness we consider the age of the tweet, calculated by subtracting the day when the tweet was created (available from the Twitter API) from the day of data collection. 
+
+#### Length of post
+
+An automatic function to count the number of characters in the text of each tweet was used to operationalise post length.
+
+#### Punctuation
+
+We considered the use of question mark (?), exclamation mark (!), and asterisk (*) by using an automatic function to count the number of times each one occurred in the tweet.
+
+#### Hashtags
+
+Like punctuation, hashtags were counted by an automatic function to determine whether any were present in the tweet. For type of hashtag, qualitative coding was carried out to group hashtags into different themes, which emerged from the data (eg whether the hashtag referred to a location, an event, etc). 
+
+#### Templates
+
+To operationalise whether the tweets were authentic/personal or whether they followed some template, thematic analysis was used. Repeat patterns of phrasing were noted by the primary coder. Initially 130 templates were coded, which were subsumed into 11 themes. For example, the templates: "police are concerned", "we are concerned" and "police are growing increasingly concerned", were all deemed to be following the theme "...are concerned...").
+
+
+#### Sentiment 
+
+Sentiment was coded both manually and automatically. Manually, the qualitative coder read through messages and categorised them in terms of the feeling that they elicited to the reader. For example, a sentiment that emerged was 'hopeful', the feeling being that of hope that the missing person will be found soon. A message could elicit more than one sentiment. Once all tweets were assigned a sentiment, the secondary coder considered a sample of the coded tweets. Discrepancies were discussed, and an overview of all the sentiments was carried out, removing from consideration sentiments that appeared infrequently. For example, only 3 tweets were coded with the sentiment “uncertain” and only 1 with the sentiment “angry”, so these sentiments were not considered in the analysis. 
+
+
+For automatic sentiment coding, we made use of the AFINN sentiment lexicon, as we wanted to develop an average score for each whole tweet, rather than extract sentiment of individual words. To illustrate, we show two tweets in our sample (any word with sentiment has the score in brackets): 
+
+
+Low score of -10: 
+
+> "HIGH risk (-2) missing (-2) person appeal;FIRSTNAME LASTNAME, age 78. Last seen leaving his address in Stretford at 14:30 on  07/06/18. Can his photograph be shared(+1) & people keep any eye out for him, FIRSTNAME suffers(-2) from dementia & is very vulnerable(-2), lost(-3) confused(-2). Thanks(+2) Pc M."
+
+
+High score of 4: 
+
+> "FIRSTNAME LASTNAME from LOCATION is still missing(-2) - can you help (+2) us to locate him please(+1)? If you have any information no(-1) matter(+1) how small please(+1) contact Police and quote log number 944 of 3 October 2018 Thank(+2) you."
+
+
+#### Tone of appeal
+
+Previous research showed that having an emotional or rational tone affects retweetability. To operationalise this construct, the primary coder assigned each tweet into one of two categories: rational or emotional. An example of each is: 
+
+
+Rational: 
+
+> "Missing:FIRSTNAME LASTNAME, East Bowling, Bradford http://t.co/Qk59Xfwz #police"   
+
+Emotional: 
+
+> "FIRSTNAME LASTNAME has been missing for two months. She was last seen in #Bury and we are desperate to find her. Her family are beside themselves with worry. https://t.co/RpxbkzZ1Jv" 
+
+A sample of these were validated by the secondary coder, and no further changes were made. 
+
+#### Images
+
+Literature showed that including a photo increases retweetability, but the sentiment of the photo matters. In the case of missing persons appeals, in some cases, the most recent image of someone available is a custody photo (16% of our sample of appeals used a custody image), which we consider to have negative valence. To assess this, each tweet was coded as having a custody photo, a regular photo, or multiple (regular) photos. Tweets with no photo were also coded as such. Photo quality was also coded on a qualitative scale of bad, average, or good/excellent. The latter was originally two separate categories, but as too few tweets had excellent quality photos, these were grouped together. We did not code here about the appearance of the missing person in the photo (ie their appearance as happy, distressed, etc).  
+
+
+#### Useful information
+
+
+While the length can be one proxy measure for how much useful information is included, a binary variable indicating whether the Twitter message included all useful information in the text, or referred readers to a further link was also created by qualitative annotation. Useful information could be: the place where the missing person was last seen, any distinguishing features (eg: “flower tattoo on right shoulder”). An example of a tweet with no useful information are: 
+
+> “Have you seen missing FIRST NAME LAST NAME from #LOCATION?”. 
+
+While such tweets are usually followed by links, here we considered the importance of including useful information in the body of the tweet. Tweets coded as not containing useful information referred the reader to a link, article, or other tweet for this information. Example phrases from such tweets are: 
+
+> “See next tweet for her description” 
+
+> “MEN report: LINK”
+
+
+### Features of the account
+
+The number of followers for each account at the time of data collection was available through the free Twitter API. To calculate the age of account, the variable 'account create day' (available from free API) was subtracted from the date of data collection. Finally, to calculate tweeting activity, the average number of daily tweets was calculated using the initial database of all tweets (not only missing persons) for each account. 
+
+All data wrangling, analysis, and visualisation was done in R (version 3.6.1) and the code for this is made available on the first author’s GitHub page (https://github.com/maczokni/misperTweetsCode/).
+
+
+
+# Results
+
+```{r summary}
+
+misper_tweets <- read.csv("misper_tweets_coded.csv")
+misper_tweets <- cleanMisperData(misper_tweets)
+
+```
+
+The average number of retweets of tweets in our sample is `r mean(misper_tweets$retweet_count, na.rm = T)`, median = `r median(misper_tweets$retweet_count, na.rm = T)`, but with huge variance (variance: `r var(misper_tweets$retweet_count, na.rm = T)`, standard deviation (SD) = `r sd(misper_tweets$retweet_count, na.rm = T)`) and right skew (min = `r min(misper_tweets$retweet_count, na.rm = T)`, max = `r max(misper_tweets$retweet_count, na.rm = T)`).  In total there were `r length(boxplot(misper_tweets$retweet_count, plot = FALSE)$out)` outliers, identified as tweets with retweet counts that are more than 3 standard deviations from the mean. The outliers are interesting in themselves, however there are a range of factors that may affect how these are generated, (ie how some tweets “go viral”). Many of these seem to be cases which receive coverage in the traditional media. Unfortunately this is not something we coded, so we cannot conclude about the role of media coverage. It is interesting to note the low median, indicating that tweets typically do not get many retweets. The upper quartile of retweets is `r quantile(misper_tweets$retweet_count, na.rm = T)[4]`  (inter quartile range (IQR) = `r quantile(misper_tweets$retweet_count, na.rm = T)[2]` - `r quantile(misper_tweets$retweet_count, na.rm = T)[4]`), further emphasising that most tweets have low retweets. `r nrow(misper_tweets %>% filter(retweet_count < 1))` tweets had no retweets (this is not because they were “too new” to have gotten attention, the “youngest” tweet with 0 retweets is 52 days old), and `r nrow(misper_tweets %>% filter(retweet_count == 1))` had only one retweet (the youngest of these 30 days old). That there are so many tweets with no sharing at all is interesting to note, and while was not on the original agenda, something to consider in the future. In any case, we recognise these outliers and use medians in most of the analysis that follows.  
+
+
+
+## Features of the missing person 
+
+`r nrow(misper_tweets %>% filter(gender_coded == "female"))` tweets were about women and `r nrow(misper_tweets %>% filter(gender_coded == "male"))` about men, the rest were about multiple people (`r nrow(misper_tweets %>% filter(gender_coded == "multippl"))`) or gender was not identifiable. Considering ethnic appearance, `r nrow(misper_tweets %>% filter(race_coded == "non-white"))` tweets were about non-white missing persons, compared to `r nrow(misper_tweets %>% filter(race_coded == "white"))` about white. For the rest (`r 1008 - nrow(misper_tweets %>% filter(race_coded == "white" | race_coded == "non-white"))`) ethnic appearance was unknown.
+
+Overall, white females had the highest average retweets (Table 2). The lowest mean is for non-white females, however the median is higher for this group than that the median for non-white males, due to some tweets about non-white males having high retweet counts, influencing the mean (the highest for non-white males reaching `r max(misper_tweets %>% filter(gender_coded == "male" & race_coded == "non-white") %>% pull(retweet_count))` retweets, while for non-white female missing persons the highest number of retweets is `r max(misper_tweets %>% filter(gender_coded == "female" & race_coded == "non-white") %>% pull(retweet_count))`). Tweets about white missing persons had more retweets (mean: `r mean(misper_tweets %>% filter(race_coded == "white") %>% pull(retweet_count), na.rm = T)`, median: `r median(misper_tweets %>% filter(race_coded == "white") %>% pull(retweet_count), na.rm = T)`, SD: `r sd(misper_tweets %>% filter(race_coded == "white") %>% pull(retweet_count), na.rm = T)`, IQR: `r quantile(misper_tweets %>% filter(race_coded == "white") %>% pull(retweet_count), na.rm = T)[2]` - `r quantile(misper_tweets %>% filter(race_coded == "white") %>% pull(retweet_count), na.rm = T)[4]`) than tweets about non-white missing persons (mean: `r mean(misper_tweets %>% filter(race_coded == "non-white") %>% pull(retweet_count), na.rm = T)`, median: `r median(misper_tweets %>% filter(race_coded == "non-white") %>% pull(retweet_count), na.rm = T)`, SD: `r sd(misper_tweets %>% filter(race_coded == "non-white") %>% pull(retweet_count), na.rm = T)`, IQR: `r quantile(misper_tweets %>% filter(race_coded == "non-white") %>% pull(retweet_count), na.rm = T)[2]` - `r quantile(misper_tweets %>% filter(race_coded == "non-white") %>% pull(retweet_count), na.rm = T)[4]`). Tweets about missing women had more retweets (mean: `r mean(misper_tweets %>% filter(gender_coded == "female") %>% pull(retweet_count), na.rm = T)`, median: `r median(misper_tweets %>% filter(gender_coded == "female") %>% pull(retweet_count), na.rm = T)`, SD: `r sd(misper_tweets %>% filter(gender_coded == "female") %>% pull(retweet_count), na.rm = T)`, IQR: `r quantile(misper_tweets %>% filter(gender_coded == "female") %>% pull(retweet_count), na.rm = T)[2]` - `r quantile(misper_tweets %>% filter(gender_coded == "female") %>% pull(retweet_count), na.rm = T)[4]`) than tweets about missing men (mean: `r mean(misper_tweets %>% filter(gender_coded == "female") %>% pull(retweet_count), na.rm = T)`, median: `r median(misper_tweets %>% filter(gender_coded == "female") %>% pull(retweet_count), na.rm = T)`, SD: `r sd(misper_tweets %>% filter(gender_coded == "female") %>% pull(retweet_count), na.rm = T)`, IQR: `r quantile(misper_tweets %>% filter(gender_coded == "female") %>% pull(retweet_count), na.rm = T)[2]` - `r quantile(misper_tweets %>% filter(gender_coded == "female") %>% pull(retweet_count), na.rm = T)[4]`). 
+
+
+
+```{r table2}
+knitr::kable(misper_tweets %>% 
+  mutate(gender_coded = na_if(gender_coded, "multippl")) %>% 
+  group_by(gender_coded, race_coded) %>% 
+  summarise(Median = median(retweet_count, na.rm = TRUE), 
+            Mean = mean(retweet_count, na.rm = TRUE), 
+            N = n(), 
+            SD = sd(retweet_count, na.rm = TRUE),
+            IQR = paste0(quantile(retweet_count, na.rm = TRUE)[2], " - ", quantile(retweet_count, na.rm = TRUE)[4]),
+            Maximum = max(retweet_count, na.rm = TRUE)) %>% 
+  rename(Gender = gender_coded, 
+         `Ethnic appearance` = race_coded), caption = "Table 2: Cross table of gender and ethnic appearance of missing persons coded from tweets showing the mean, median, sd, iqr of retweets for each group, and the number of tweets in each group.")
+
+```
+
+
+## Features of the tweet
+
+In total, `r nrow(misper_tweets %>% filter(phototype == "No photo"))` (`r nrow(misper_tweets %>% filter(phototype == "No photo"))/nrow(misper_tweets)*100`%) of the tweets did not have a photo with them. Of the ones that did have a photo, `r nrow(misper_tweets %>% filter(phototype == "Custody photo"))` (`r nrow(misper_tweets %>% filter(phototype == "Custody photo"))/nrow(misper_tweets %>% filter(phototype != "No photo"))*100`%) 27.1% were custody photos (`r nrow(misper_tweets %>% filter(phototype == "Custody photo"))/nrow(misper_tweets)*100`% of all the tweets). Considering photo type shows that tweets with no photo at all have the lowest median retweets, but not the lowest mean. Tweets with custody photo have the lowest mean retweets. However the median is higher with custody photo than no photo. Tweets with a regular photo have higher average and median retweets in our sample than both no photo and custody photo. Multiple photos have higher mean but not a higher median compared with one regular photo (Table 3). 
+
+```{r table 3}
+
+knitr::kable(misper_tweets %>% 
+  group_by(phototype) %>% 
+  summarise(Median = median(retweet_count, na.rm = TRUE), 
+            Mean = mean(retweet_count, na.rm = TRUE), 
+            N = n(), 
+            SD = sd(retweet_count, na.rm = TRUE),
+            IQR = paste0(quantile(retweet_count, na.rm = TRUE)[2], " - ", quantile(retweet_count, na.rm = TRUE)[4]),
+            Maximum = max(retweet_count, na.rm = TRUE)) %>% 
+    rename(`Photo type` = phototype), caption = "Table 3: Photo type")
+
+```
+
+
+Figure 1 shows the relationship between photo type and retweet count, taking into account gender and ethnic appearance.  
+
+```{r figure1, fig.height= 7, fig.width= 8, fig.cap= "Figure 1: Retweets for different image types by gender and ethnic appearance"}
+
+fig_df <- makeDemophotoplotDf(misper_tweets)
+makeFig1(fig_df)
+
+
+```
+
+For all groups, tweets with no photo or with a custody image have fewer median retweets than those with a regular (non-custody) photo. Having multiple photos does not seem to get more retweets. In all cases, missing persons who are white have higher median retweets than non-white counterparts.
+
+There is no clear pattern to show that tweets which have better quality photos have more retweets (Table 4).
+
+```{r table4}
+
+knitr::kable(misper_tweets %>% 
+               filter(!is.na(image_quality_coded)) %>% 
+  group_by(image_quality_coded) %>% 
+  summarise(Median = median(retweet_count, na.rm = TRUE), 
+            Mean = mean(retweet_count, na.rm = TRUE), 
+            N = n(), 
+            SD = sd(retweet_count, na.rm = TRUE),
+            IQR = paste0(quantile(retweet_count, na.rm = TRUE)[2], " - ", quantile(retweet_count, na.rm = TRUE)[4]),
+            Maximum = max(retweet_count, na.rm = TRUE)) %>% 
+    rename(`Photo quality` = image_quality_coded), caption = "Table 4: Photo quality")
+
+
+```
+
+
+Interestingly though, for men, as photo quality improves, the difference in median retweets for tweets about white and non-white missing persons increases (Figure 2). 
+
+```{r figure2, fig.height= 7, fig.width= 8, fig.cap= "Figure 2: Retweets for different image quality by gender and ethnic appearance"}
+
+fig2_df <- makeFig2Df(misper_tweets)
+
+ggplot(fig2_df, aes(x = w_median, y =image_quality_coded)) + 
+  facet_wrap( ~ gender_coded) +
+  # geom_segment(aes(x = w_median, xend = nw_median, 
+  #                  y = image_quality_coded, yend = image_quality_coded), 
+  #              lwd = 1, col = "#8A5C7B", alpha = 0.5) +
+  geom_errorbarh(data = fig2_df, aes(x = nw_median, y = image_quality_coded, xmin = nw_lqt, xmax =  nw_uqt), height = 0.1, lwd = 0.5, col = "#8A5C7B", alpha = 1, position = position_nudge(y = -0.05)) +
+    geom_errorbarh(data = fig2_df, aes(x =  w_median, y = image_quality_coded, xmin = w_lqt, xmax =  w_uqt), height = 0.1, lwd = 0.5, col = "black", alpha = 1, position = position_nudge(y = 0.05)) +
+  geom_point(aes(fill = "White", size = w_count), pch = 21, col = "black", position = position_nudge(y = 0.05)) + 
+  geom_point(aes(x = nw_median, fill = "Non-white", size = nw_count), pch = 21, col = "black", position = position_nudge(y = -0.05)) +
+  scale_fill_manual(values = c("#8A5C7B", "white"), labels = c("Non-white", "White")) + 
+  scale_alpha_continuous(guide = F) +
+  # labs(title = "Do different quality images have more retweets?",
+  #      subtitle = ".",
+  #      caption = "Data: 1008 Twitter appeals for missing persons by Greater Manchester Police Twitter accounts\ncontact: @r_solymosi") +
+  xlab("Median retweet count") +  
+  ylab("Photo quality")+ 
+  theme_bw() + 
+  scale_x_log10() + 
+  guides(fill = guide_legend(title = "Ethnic appearance"), size = guide_legend(title = "Number of tweets")) + 
+  theme(plot.title = element_text(size = 16, face = 'bold'),
+        legend.background = element_rect(fill = alpha("white", 0.0)),
+        strip.background = element_rect(fill="white", colour = 'white'), 
+        strip.text.x = element_text(size = 12,angle = 0, hjust = 0),
+        strip.text.y = element_text(size = 12),
+        axis.text.y = element_text(size = 10),
+        panel.grid.major = element_blank())
+
+```
+
+
+```{r timecor}
+#set digits to 3 for stats outputs
+options(digits=3)
+
+#get correlation results into object to call in text
+timecor <- cor.test(misper_tweets$diffdate, misper_tweets$retweet_count)
+
+```
+
+There is a weak correlation between days since tweet was created and retweet count (Pearson's product-moment correlation =  `r timecor$estimate`, p-value = `r timecor$p.value`). There is no clear difference in median retweets between appeals made in different hours of day (Figure 3) .
+
+```{r fig3, fig.height= 4, fig.width= 8, fig.cap= "Figure 3: Retweets by hour of day"}
+
+fig_df <- misper_tweets %>% group_by(tw_hour) %>% 
+  summarise(mean_rt = mean(retweet_count, na.rm = TRUE),
+            med_rt = median(retweet_count, na.rm = TRUE),
+            num_tweets = n(), 
+            min_rt = min(retweet_count, na.rm = TRUE), 
+            max_rt = max(retweet_count, na.rm = TRUE), 
+            sdt_err_rt = sd(retweet_count, na.rm = TRUE)/sqrt(num_tweets), 
+            sd_rt = sd(retweet_count, na.rm = TRUE), 
+            low_qt = quantile(retweet_count, na.rm = TRUE)[2], 
+            up_qt = quantile(retweet_count, na.rm = TRUE)[4])
+
+ggplot() + 
+  geom_path(data = fig_df, aes(x = tw_hour, y = med_rt, group = 1), colour = 'grey') + 
+  geom_point(data = fig_df, aes(x = tw_hour, y = med_rt, size = num_tweets)) + 
+  geom_errorbar(data = fig_df, aes(x = tw_hour, y = med_rt, ymin = low_qt, ymax =  up_qt), height = 0.2) + 
+  # labs(title = "Does hour when tweet is sent matter?",
+  #      subtitle = "Not really, no.",
+  #      caption = "Data: 1008 Twitter appeals for missing persons by Greater Manchester Police Twitter accounts\ncontact: @r_solymosi") +
+  xlab("Hour of the day when tweet was sent") +  
+  ylab("Median retweets with IQR")+ 
+  theme_bw() + 
+  guides(size = guide_legend(title = "Number of tweets")) +
+  theme(plot.title = element_text(size = 16, face = 'bold'),
+        legend.background = element_rect(fill = alpha("white", 0.0)),
+        strip.background = element_rect(fill="white", colour = 'white'), 
+        strip.text.x = element_text(size = 12,angle = 0, hjust = 0),
+        strip.text.y = element_text(size = 12),
+        axis.text.y = element_text(size = 10))
+
+```
+
+
+```{r lengthcor}
+
+#get correlation results into object to call in text
+#find corr for both pre and post twitter changing character limit from 140 to 280
+#actual day is 2017-11-07 source: https://techcrunch.com/2017/11/07/twitter-officially-expands-its-character-count-to-280-starting-today/
+#define cutoff date when twitter character limit changed from 140 to 280
+cutoffdate <- ymd("2017-11-07")
+#create dichotomous variable if tweet is before/after character limit change
+misper_tweets$date_prepost <- ifelse(misper_tweets$date > cutoffdate, "post", "pre") 
+
+#relevel
+misper_tweets$date_prepost <- factor(misper_tweets$date_prepost, levels = c("pre", "post"))
+
+
+precor <- cor.test(misper_tweets %>% filter(date_prepost == "pre") %>% pull(retweet_count), 
+                         misper_tweets %>% filter(date_prepost == "pre") %>% pull(post_length))
+postcor <- cor.test(misper_tweets %>% filter(date_prepost == "post") %>% pull(retweet_count), 
+                          misper_tweets %>% filter(date_prepost == "post") %>% pull(post_length))
+
+
+```
+
+
+Considering the written content of the tweets, length of post does not seem to make a difference to retweets; we cannot say that longer (or shorter) posts have more retweets, either before or after Twitter’s change of character limit from 140 characters (Pearson's product-moment  correlation = `r precor$estimate`, p-value = `r precor$p.value`) to 280 characters (Pearson's product-moment correlation = `r postcor$estimate`, p-value = `r postcor$p.value`). 
+`r nrow(misper_tweets %>% filter(useful_information_yn == "Y"))` of the tweets included all the useful information in the tweet’s text, while the rest pointed to links or attachments for further information. 
+
+```{r usefulinfo}
+
+#back to rounding to whole numbers for number of retweets
+options(digits=0)
+
+
+usefulinfo_df <- misper_tweets %>% group_by(useful_information_yn) %>% 
+  summarise(n = n(),
+            mean_rt = mean(retweet_count, na.rm = T), 
+            median_rt = median(retweet_count, na.rm = T), 
+            sd_rt = sd(retweet_count, na.rm = T), 
+            low_qt = quantile(retweet_count, na.rm = TRUE)[2], 
+            up_qt = quantile(retweet_count, na.rm = TRUE)[4])
+```
+
+Tweets with the useful information in-text had higher mean and median retweets (mean = `r usefulinfo_df %>% filter(useful_information_yn == "Y") %>% pull(mean_rt)`, median = `r usefulinfo_df %>% filter(useful_information_yn == "Y") %>% pull(median_rt)`, standard deviation = `r usefulinfo_df %>% filter(useful_information_yn == "Y") %>% pull(sd_rt)`, IQR = `r usefulinfo_df %>% filter(useful_information_yn == "Y") %>% pull(low_qt)` - `r usefulinfo_df %>% filter(useful_information_yn == "Y") %>% pull(up_qt)`) than those that relied on links (mean = `r usefulinfo_df %>% filter(useful_information_yn == "N") %>% pull(mean_rt)`, median = `r usefulinfo_df %>% filter(useful_information_yn == "N") %>% pull(median_rt)`, standard deviation = `r usefulinfo_df %>% filter(useful_information_yn == "N") %>% pull(sd_rt)`, IQR = `r usefulinfo_df %>% filter(useful_information_yn == "N") %>% pull(low_qt)` - `r usefulinfo_df %>% filter(useful_information_yn == "N") %>% pull(up_qt)`). 
+
+```{r}
+
+punct_df <- makePunctDf(misper_tweets)
+
+```
+
+Tweets with question marks (n= `r punct_df %>% filter(punct == "question mark (?)") %>% pull(num_tweets_with)`) and tweets with hashtags (n= `r punct_df %>% filter(punct == "hashtag (#)") %>% pull(num_tweets_with)`) have higher median retweets than tweets without these types of punctuation. Tweets with exclamation marks (n = `r punct_df %>% filter(punct == "exclamation mark (!)") %>% pull(num_tweets_with)`) have the same median to those which do not, and tweets using asterisk (n= `r punct_df %>% filter(punct == "asterisk (*)") %>% pull(num_tweets_with)`) have lower median retweet than tweets that do not (Figure 4). 
+
+```{r fig4, fig.height= 7, fig.width= 8, fig.cap= "Figure 4: Retweets for the use of different punctuation"}
+
+ggplot(data = punct_df, aes(x = median_rt_with, y = punct)) + 
+ geom_errorbarh(data = punct_df, aes(x = median_rt_not, y = punct, xmin = low_qt_not, xmax =  up_qt_not), height = 0.2, lwd = 0.5, col = "black", alpha = 1, position = position_nudge(y = -0.06)) + 
+  geom_errorbarh(data = punct_df, aes(x = median_rt_with, y = punct, xmin = low_qt_with, xmax =  up_qt_with), height = 0.2, lwd = 0.5, col = "#8A5C7B", alpha = 1, position = position_nudge(y = 0.06)) + 
+  geom_point(data = punct_df, aes(x = median_rt_not, fill = "Tweets without this punctuation", size = num_tweets_not), pch = 21, col = "black", position = position_nudge(y = -0.06)) +
+  geom_point(aes(fill = "Tweets with this punctuation", size = num_tweets_with), pch = 21, col = "black", position = position_nudge(y = 0.06)) + 
+  scale_fill_manual(values = c("#8A5C7B", "white"), labels = c("Tweets with this punctuation", "Tweets without this punctuation")) + 
+  ylab("Punctuation") +  
+  xlab("Median number of retweets")+ 
+  theme_bw() + 
+  guides(fill = guide_legend(title = "Has punctuation?"), size = guide_legend(title = "Number of tweets")) +
+  theme(plot.title = element_text(size = 16, face = 'bold'),
+        legend.background = element_rect(fill = alpha("white", 0.0)),
+        strip.background = element_rect(fill="white", colour = 'white'), 
+        strip.text.x = element_text(size = 12,angle = 0, hjust = 0),
+        strip.text.y = element_text(size = 12),
+        axis.text.y = element_text(size = 10)) + 
+  scale_x_log10() 
+
+```
+
+
+In our sample, most tweets have no hashtags at all. Taken together, tweets with at least one hashtag (n = `r punct_df %>% filter(punct == "hashtag (#)") %>% pull(num_tweets_with)`) have a higher median but lower mean retweets (median = `r punct_df %>% filter(punct == "hashtag (#)") %>% pull(median_rt_with)` , mean = `r punct_df %>% filter(punct == "hashtag (#)") %>% pull(mean_rt_with)`, standard deviation =  `r punct_df %>% filter(punct == "hashtag (#)") %>% pull(sd_rt_with)`, IQR = `r punct_df %>% filter(punct == "hashtag (#)") %>% pull(low_qt_with)`-`r punct_df %>% filter(punct == "hashtag (#)") %>% pull(up_qt_with)`) than those which do not (median = `r punct_df %>% filter(punct == "hashtag (#)") %>% pull(median_rt_not)` , mean = `r punct_df %>% filter(punct == "hashtag (#)") %>% pull(mean_rt_not)`, standard deviation =  `r punct_df %>% filter(punct == "hashtag (#)") %>% pull(sd_rt_not)`, IQR = `r punct_df %>% filter(punct == "hashtag (#)") %>% pull(low_qt_not)`-`r punct_df %>% filter(punct == "hashtag (#)") %>% pull(up_qt_not)`). Considering number of hashtags shows that tweets with more hashtags have more retweets (Table 4).
+
+Table 5: Number of hashtags
+
+```{r table5}
+
+misper_tweets$numhash_bin <- "none"
+misper_tweets$numhash_bin <- ifelse(misper_tweets$numhash == 1, "1", misper_tweets$numhash_bin)
+misper_tweets$numhash_bin <- ifelse(misper_tweets$numhash == 2, "2", misper_tweets$numhash_bin)
+misper_tweets$numhash_bin <- ifelse(misper_tweets$numhash > 2, "3 or more", misper_tweets$numhash_bin)
+
+misper_tweets$numhash_bin <- factor(misper_tweets$numhash_bin, levels = c("none", "1", "2", "3 or more"))
+
+knitr::kable(misper_tweets %>% 
+  group_by(numhash_bin) %>% 
+  summarise(mean_rt = mean(retweet_count, na.rm = T),
+            sd_rt = sd(retweet_count, na.rm = T),
+            med_rt = median(retweet_count, na.rm = T),
+            iqr = paste0(quantile(retweet_count, na.rm = TRUE)[2], "-",quantile(retweet_count, na.rm = TRUE)[4]),
+            num_tweets = n()) %>% 
+    rename(`Number of hashtags` = numhash_bin,
+           Mean = mean_rt,
+           `Std dev` = sd_rt,
+           Median = med_rt,
+           IQR = iqr,
+           `Number of tweets` = num_tweets))
+
+
+```
+
+
+Besides the number of hashtags, it’s content is also important. Thematic analysis was used to group hashtags into 3 overarching themes, and a miscellaneous “other” category (Table 6).
+
+Table 6: Types of hashtags used (*some tweets have more than one type of hashtag)
+
+```{r table6}
+
+hashtype_df <- makeHashDf(misper_tweets)
+
+hashtype_df$Examples <- c("#Chorlton or #Bury", "#Missing or #MissingPerson", "#101 or #GMP", "#RT or #update or #helpfindjohn or #thankyou") 
+
+
+knitr::kable(hashtype_df %>% select(hash, num_tweets_with, Examples) %>% 
+          rename(`Hashtag type` = hash,
+           `No. of tweets` = num_tweets_with))
+
+```
+
+
+Figure 5 illustrates the different median retweets for different types of hashtags. Hashtags that mention location have a higher median retweet than tweets that do not have a location hashtag. On the other hand, using a hashtag for a police number (#101 or #999) and tweets using #missing have lower median retweets than tweets which do not have these hashtags. “Other” is made up of the following hashtags: 4 referred to names (eg: #FindCorrie or #TessBlandamer), 2 expressed thanks (eg #thankyou), 8 were abbreviations (eg: #mufc, #INPT1, #whp) and two updates (#Update and #LatestNews). 
+
+```{r fig5, fig.height= 7, fig.width= 8, fig.cap= "Figure 5: Retweets for different hashtag types"}
+
+ggplot(data = hashtype_df, aes(x = median_rt, y = reorder(hash, median_rt))) + 
+  geom_errorbarh(aes(xmin = low_qt, xmax =  up_qt), height = 0.2, lwd = 0.5, col = "#8A5C7B", alpha = 1, position = position_nudge(y = 0.06)) + 
+  geom_point(aes(fill = "Tweets with this hashtag", size = num_tweets_with), pch = 21, col = "black", position = position_nudge(y = 0.06)) + 
+  geom_errorbarh(data = hashtype_df, aes(x = median_rt_not, y = hash, xmin = low_qt_not, xmax =  up_qt_not), height = 0.2, lwd = 0.5, col = "black", alpha = 1, position = position_nudge(y = -0.06)) + 
+  geom_point(aes(x = median_rt_not, fill = "Tweets without this hashtag", size = num_tweets_not), pch = 21, col = "black", position = position_nudge(y = -0.06)) +
+  scale_fill_manual(values = c("#8A5C7B", "white"), labels = c("Tweets with this hashtag", "Tweets without this hashtag")) + 
+  ylab("Hashtag type") +  
+  xlab("Median number of retweets")+ 
+  theme_bw() + 
+  guides(fill = guide_legend(title = "Has hashtag"), size = guide_legend(title = "Number of tweets")) +
+  scale_x_log10() + 
+  theme(plot.title = element_text(size = 16, face = 'bold'),
+        legend.background = element_rect(fill = alpha("white", 0.0)),
+        strip.background = element_rect(fill="white", colour = 'white'), 
+        strip.text.x = element_text(size = 12,angle = 0, hjust = 0),
+        strip.text.y = element_text(size = 12),
+        axis.text.y = element_text(size = 10))
+
+
+```
+
+
+Thematic coding to extract commonly used phrases which may act as templates identified initially 130 templates, which were further grouped into 12 overarching categories. About a quarter of tweets (25.4%, n = 255) were completely original (no resemblance to any template), while the rest were coded into these 12 categories described in Table 7. 
+
+```{r table7}
+
+examples <- makeTemplateExamplesDf(misper_tweets)
+
+knitr::kable(examples %>% arrange(-num_tweets) %>% rename(`No. of tweets` = num_tweets, 
+                                                          Template = template,
+                                                          Example = example))
+
+
+```
+
+
+Figure 6 illustrates the different median retweets for different templates. Tweets that have the “have you seen…”, “urgent appeal:”, “police/etc are appealing for…” have much higher median retweets than tweets that do not have such phrasing. Tweets that mention that a missing person is high risk, and tweets that ask explicitly to “please retweet” also have higher median retweets than those which do not. Tweets that do not use any of these templates (original phrasing), tweets that use “can you help?” and tweets that use asterisks for emphasis (\*\*missing\*\*) have lower median retweets than tweets that do not use these templates. 
+
+```{r fig6, fig.height= 7, fig.width= 8, fig.cap= "Figure 6: Retweets for different templates"}
+
+template_list <- c("oneohone", "help", "concern", "plsrt", "hashmiss", "aster", "appeal", "highrisk", "urg", "link", "origyn_2", "haveuseen", "thx")
+datalist = list()
+i <- 1
+for (temp in template_list) {
+  datalist[[i]] <- data.frame(template = temp,
+                              median_rt = median(misper_tweets %>% filter(eval(as.symbol(temp)) == 1) %>% pull(retweet_count), na.rm = TRUE), 
+                              num_tweets_with = nrow(misper_tweets %>% filter(eval(as.symbol(temp)) == 1)),
+                              median_rt_not = median(misper_tweets %>% filter(eval(as.symbol(temp)) == 0) %>% pull(retweet_count), na.rm = TRUE), 
+                              low_qt = quantile(misper_tweets %>% filter(eval(as.symbol(temp)) == 1) %>% pull(retweet_count), na.rm = TRUE)[2],
+                                up_qt = quantile(misper_tweets %>% filter(eval(as.symbol(temp)) == 1) %>% pull(retweet_count), na.rm = TRUE)[4],
+                                low_qt_not = quantile(misper_tweets %>% filter(eval(as.symbol(temp)) == 0) %>% pull(retweet_count), na.rm = TRUE)[2],
+                                up_qt_not = quantile(misper_tweets %>% filter(eval(as.symbol(temp)) == 0) %>% pull(retweet_count), na.rm = TRUE)[4],
+                              num_tweets_not = nrow(misper_tweets %>% filter(eval(as.symbol(temp)) == 0)))
+  i <- i + 1
+  
+
+}
+
+template_df <- bind_rows(datalist)
+
+template_df$template <- ifelse(template_df$template == "urg", "urgent appeal", template_df$template)
+template_df$template <- ifelse(template_df$template == "plsrt", "please RT", template_df$template)
+template_df$template <- ifelse(template_df$template == "origyn_2", "original phrasing", template_df$template)
+template_df$template <- ifelse(template_df$template == "link", "link to info", template_df$template)
+template_df$template <- ifelse(template_df$template == "oneohone", "call 101", template_df$template)
+template_df$template <- ifelse(template_df$template == "highrisk", "high risk", template_df$template)
+template_df$template <- ifelse(template_df$template == "help", "can you help", template_df$template)
+template_df$template <- ifelse(template_df$template == "hashmiss", "#missing", template_df$template)
+template_df$template <- ifelse(template_df$template == "concern", "... are concerned for..", template_df$template)
+template_df$template <- ifelse(template_df$template == "aster", "**missing**", template_df$template)
+template_df$template <- ifelse(template_df$template == "appeal", "... are appealing for..", template_df$template)
+template_df$template <- ifelse(template_df$template == "haveuseen", "have you seen..", template_df$template)
+template_df$template <- ifelse(template_df$template == "thx", "thanks", template_df$template)
+
+ggplot(data = template_df, aes(x = median_rt, y = reorder(template, median_rt))) + 
+  geom_errorbarh(aes(xmin = low_qt, xmax =  up_qt), height = 0.2, lwd = 0.5, col = "#8A5C7B", alpha = 1, position = position_nudge(y = 0.09)) + 
+  geom_point(aes(fill = "Tweets with this template", size = num_tweets_with), pch = 21, col = "black", position = position_nudge(y = 0.09)) + 
+  geom_errorbarh(data = template_df, aes(x = median_rt_not, y = template, xmin = low_qt_not, xmax =  up_qt_not), height = 0.2, lwd = 0.5, col = "black", alpha = 1, position = position_nudge(y = -0.09)) + 
+  geom_point(aes(x = median_rt_not, fill = "Tweets without this template", size = num_tweets_not), pch = 21, col = "black", position = position_nudge(y = -0.09)) +
+  scale_fill_manual(values = c("#8A5C7B", "white"), labels = c("Tweets with this template", "Tweets without this template")) + 
+  ylab("Template") +  
+  xlab("Median number of retweets")+ 
+  theme_bw() + 
+  guides(fill = guide_legend(title = "Has template"), size = guide_legend(title = "Number of tweets")) +
+  scale_x_log10() + 
+  theme(plot.title = element_text(size = 16, face = 'bold'),
+        legend.background = element_rect(fill = alpha("white", 0.0)),
+        strip.background = element_rect(fill="white", colour = 'white'), 
+        strip.text.x = element_text(size = 12,angle = 0, hjust = 0),
+        strip.text.y = element_text(size = 12),
+        axis.text.y = element_text(size = 10))
+
+
+options(digits=2)
+```
+
+From the AFINN sentiment lexicon we calculated scores for each tweet. Overall, the mean score was `r mean(misper_tweets$sent_score, na.rm = T)`, and the median `r median(misper_tweets$sent_score, na.rm = T)`. The lowest score was `r min(misper_tweets$sent_score, na.rm = T)` and the highest was `r max(misper_tweets$sent_score, na.rm = T)`. Scores follow a left-skewed distribution with a left tail. There does not seem to be much of a relationship between sentiment score and retweet count (Pearson's product-moment correlation = `r cor.test(misper_tweets$sent_score, misper_tweets$retweet_count)$estimate`, p-value = `r cor.test(misper_tweets$sent_score, misper_tweets$retweet_count)$p.value`). 
+
+Figure 7 shows results from manually coded sentiment categories. Tweets coded scared or worried have higher median retweets than those not coded with these sentiments, followed by hopeful tweets. Hopeless and negative sentiment tweets have the much lower median retweets than tweets not coded with these sentiments. Mean Afinn sentiment score does not seem associated with manually coded sentiment. While ‘willing to engage’ tweets have a higher mean score (more positive), so do the tweets coded as ‘negative’ by the manual coder. The tweets coded ‘hopeful’ in the manual coding process have the lowest mean score (`r mean(misper_tweets %>% filter(sent_hopeful == 1) %>% pull(sent_score), na.rm = T)`), which is difficult to reconcile. 
+
+
+```{r fig7, fig.height= 7, fig.width= 8, fig.cap= "Figure 7: Retweets for different sentiments"}
+
+#make df
+sent_list <- c("sent_neutral", "sent_worried", "sent_sad", "sent_scared", "sent_concerned", 
+               "sent_wte", "sent_neg", "sent_hopeful", "sent_hopeless")
+datalist = list()
+i <- 1
+for (sent in sent_list) {
+  datalist[[i]] <- data.frame(sentiment = gsub("sent_", "", sent),
+                              median_rt = median(misper_tweets %>% filter(eval(as.symbol(sent)) == 1) %>% pull(retweet_count), na.rm = TRUE), 
+                              mean_sent = mean(misper_tweets %>% filter(eval(as.symbol(sent)) == 1) %>% pull(sent_score), na.rm = TRUE),
+                              num_tweets = nrow(misper_tweets %>% filter(eval(as.symbol(sent)) == 1)),
+                              median_rt_wo = median(misper_tweets %>% filter(eval(as.symbol(sent)) == 0) %>% pull(retweet_count), na.rm = TRUE), 
+                              mean_sent_wo = mean(misper_tweets %>% filter(eval(as.symbol(sent)) == 0) %>% pull(sent_score), na.rm = TRUE),
+                              low_qt = quantile(misper_tweets %>% filter(eval(as.symbol(sent)) == 1) %>% pull(retweet_count), na.rm = TRUE)[2],
+                                up_qt = quantile(misper_tweets %>% filter(eval(as.symbol(sent)) == 1) %>% pull(retweet_count), na.rm = TRUE)[4],
+                                low_qt_not = quantile(misper_tweets %>% filter(eval(as.symbol(sent)) == 0) %>% pull(retweet_count), na.rm = TRUE)[2],
+                                up_qt_not = quantile(misper_tweets %>% filter(eval(as.symbol(sent)) == 0) %>% pull(retweet_count), na.rm = TRUE)[4],
+                              num_tweets_wo = nrow(misper_tweets %>% filter(eval(as.symbol(sent)) == 0)))
+  i <- i + 1
+  
+  
+}
+
+sent_df <- bind_rows(datalist)
+
+sent_df$sentiment <- ifelse(sent_df$sentiment == "wte", "willing to engage", sent_df$sentiment)
+sent_df$sentiment <- ifelse(sent_df$sentiment == "neg", "negative", sent_df$sentiment)
+
+ggplot(data = sent_df, aes(x = median_rt, y = reorder(sentiment, median_rt))) + 
+  geom_errorbarh(data = sent_df, aes(x = median_rt_wo, y = sentiment, xmin = low_qt_not, xmax =  up_qt_not), height = 0.2, lwd = 0.5, col = "black", alpha = 1, position = position_nudge(y = -0.09)) + 
+  geom_point(data = sent_df, aes(x = median_rt_wo, colour = "Tweets without this sentiment", size = num_tweets_wo), pch = 21, fill = 'white', position = position_nudge(y = -0.09)) +
+  
+  geom_errorbarh(aes(xmin = low_qt, xmax = up_qt), height = 0.2, lwd = 0.5, col = "#8A5C7B", alpha = 1, position = position_nudge(y = 0.09)) + 
+  geom_point(aes(fill = mean_sent, size = num_tweets, colour = "#8A5C7B"), pch = 21, position = position_nudge(y = 0.09)) + 
+  
+  scale_colour_manual(values = c("#8A5C7B", "black"), labels = c("Tweets with this sentiment", "Tweets without this sentiment")) + 
+  scale_fill_gradient(low = "#8A5C7B", high = "white") + 
+  ylab("Sentiment") +  
+  xlab("Median number of retweets")+ 
+  theme_bw() + 
+  guides(size = guide_legend(title = "Number of tweets"), fill = guide_legend(title = "Afinn sentiment score"), colour = guide_legend(title = "Has sentiment?")) +
+  theme(plot.title = element_text(size = 16, face = 'bold'),
+        legend.background = element_rect(fill = alpha("white", 0.0)),
+        strip.background = element_rect(fill="white", colour = 'white'), 
+        strip.text.x = element_text(size = 12,angle = 0, hjust = 0),
+        strip.text.y = element_text(size = 12),
+        axis.text.y = element_text(size = 10))
+
+
+
+```
+
+
+Regarding tone, `r nrow(misper_tweets %>% filter(tone_coded == "rational"))` tweets were coded as rational, and `r nrow(misper_tweets %>% filter(tone_coded == "emotional"))` as emotional. Altogether, tweets with an emotional tone have more retweets (median = `r median(misper_tweets %>% filter(tone_coded == "emotional") %>% pull(retweet_count), na.rm = TRUE)`, mean = `r mean(misper_tweets %>% filter(tone_coded == "emotional") %>% pull(retweet_count), na.rm = TRUE)`, sd = `r sd(misper_tweets %>% filter(tone_coded == "emotional") %>% pull(retweet_count), na.rm = TRUE)`, IQR = `r paste0(quantile(misper_tweets %>% filter(tone_coded == "emotional") %>% pull(retweet_count), na.rm = TRUE)[2], " - ", quantile(misper_tweets %>% filter(tone_coded == "emotional") %>% pull(retweet_count), na.rm = TRUE)[4])`), than those with a rational tone (median = `r median(misper_tweets %>% filter(tone_coded == "rational") %>% pull(retweet_count), na.rm = TRUE)`, mean = `r mean(misper_tweets %>% filter(tone_coded == "rational") %>% pull(retweet_count), na.rm = TRUE)`, sd = `r sd(misper_tweets %>% filter(tone_coded == "rational") %>% pull(retweet_count), na.rm = TRUE)`, IQR = `r paste0(quantile(misper_tweets %>% filter(tone_coded == "rational") %>% pull(retweet_count), na.rm = TRUE)[2], " - ", quantile(misper_tweets %>% filter(tone_coded == "rational") %>% pull(retweet_count), na.rm = TRUE)[4])`)(median = 7, mean = 30.6, sd = 86.3, IQR = 21). However, when separating out differences by gender and ethnic appearance, we see that for white missing persons rational tone have higher retweets, while for non-white missing persons emotional have higher number of retweets (Figure 8). 
+
+```{r fig8, fig.height= 7, fig.width= 8, fig.cap= "Figure 8: Retweets for different tones"}
+
+
+fig_df <- left_join(misper_tweets %>%
+  filter(!is.na(race_coded) & gender_coded %in% c("male", "female")) %>%
+  group_by(race_coded, gender_coded, tone_coded) %>%
+  summarise(num_tweets = n()) %>%
+  spread(tone_coded, num_tweets) %>%
+  rename(num_emot = emotional,
+         num_rat = rational),
+  misper_tweets %>%
+  filter(!is.na(race_coded) & gender_coded %in% c("male", "female")) %>%
+  group_by(race_coded, gender_coded, tone_coded) %>%
+  summarise(median_rt = median(retweet_count, na.rm = T)) %>%
+              spread(tone_coded, median_rt) %>%
+  rename(med_emot = emotional,
+         med_rat = rational)) %>% 
+  mutate(demog = paste0(race_coded, " ", tolower(gender_coded), "s"))
+
+fig_df <- left_join(fig_df, misper_tweets %>%
+  filter(!is.na(race_coded) & gender_coded %in% c("male", "female")) %>%
+  group_by(race_coded, gender_coded, tone_coded) %>%
+  summarise(low_qt = quantile(retweet_count, na.rm = T)[2]) %>%
+              spread(tone_coded, low_qt) %>%
+  rename(lowqt_emot = emotional,
+         lowqt_rat = rational)) 
+
+fig_df <- left_join(fig_df, misper_tweets %>%
+  filter(!is.na(race_coded) & gender_coded %in% c("male", "female")) %>%
+  group_by(race_coded, gender_coded, tone_coded) %>%
+  summarise(high_qt = quantile(retweet_count, na.rm = T)[4]) %>%
+              spread(tone_coded, high_qt) %>%
+  rename(highqt_emot = emotional,
+         highqt_rat = rational)) 
+
+ggplot(fig_df, aes(x = med_rat, y = reorder(demog, med_rat))) + 
+    geom_errorbarh(aes(x = med_rat, xmin = lowqt_rat, xmax =  highqt_rat), height = 0.2, lwd = 0.5, col = "black", alpha = 1, position = position_nudge(y = -0.09)) + 
+  geom_point(aes(fill = "Rational", size = num_rat), pch = 21, col = "black", position = position_nudge(y = -0.09)) + 
+  geom_errorbarh(aes(x = med_emot, xmin = lowqt_emot, xmax =  highqt_emot), height = 0.2, lwd = 0.5, col = "#8A5C7B", alpha = 1, position = position_nudge(y = 0.09)) + 
+  geom_point(aes(x = med_emot, fill = "Emotional", size = num_emot), pch = 21, col = "black", position = position_nudge(y = 0.09)) +
+  
+  scale_fill_manual(values = c("#8A5C7B", "white"), labels = c("Emotional", "Rational")) + 
+  scale_alpha_continuous(guide = F) +
+         ylab("") +
+         xlab("Median number of retweets") +
+  theme_bw() + 
+  guides(fill = guide_legend(title = "Tone"), size = guide_legend(title = "Number of tweets")) + 
+  theme(plot.title = element_text(size = 16, face = 'bold'),
+        legend.background = element_rect(fill = alpha("white", 0.0)),
+        strip.background = element_rect(fill="white", colour = 'white'), 
+        strip.text.x = element_text(size = 12,angle = 0, hjust = 0),
+        strip.text.y = element_text(size = 12),
+        axis.text.y = element_text(size = 10),
+        panel.grid.major = element_blank())
+
+
+```
+
+## Features of the account
+
+Finally we consider account characteristics. Number of daily tweets and age of account do not seem associated with retweets of appeals. Low activity accounts such as  \@GMPSaddleworth can have high RTs, and high tweet activity accounts can have low RTs, such as \@GMPRadcliffe. While the oldest account (\@gmpolice) has a high mean number of RTs, so does the youngest account (\@gmpcheadle). Number of followers has a slight association, mostly driven by the two most followed accounts, which are \@gmpolice and \@GMPCityCentre (Figure 9).
+
+```{r fig9, fig.height= 6, fig.width= 9, fig.cap= "Figure 9: Accoutn chatracteristics"}
+
+#calculate age of account
+misper_tweets <- misper_tweets %>% 
+  mutate(acct_age = difftime(ymd_hms(collection_date),dmy_hm(account_created_at), units = "days"))
+
+#calculate number of daily tweets
+alltweets <- read.csv("tweets/all_gmp_acct_tweets_2.csv")
+alltweets$date <- dmy_hm(alltweets$created_at)
+ndaily <- alltweets %>%  
+  group_by(screen_name, floor_date(date, unit = "day")) %>% 
+  dplyr::summarise(n = n()) %>% 
+  group_by(screen_name) %>% 
+  dplyr::summarise(avg_daily_tweets = round(mean(n),0))
+
+misper_tweets <- dplyr::left_join(misper_tweets, ndaily, by = c("screen_name" = "screen_name"))
+
+fig_df <- misper_tweets %>% 
+  group_by(screen_name, followers_count, avg_daily_tweets, acct_age) %>% 
+  summarise(med_rt = median(retweet_count, na.rm = TRUE)) %>% 
+  mutate(acct_age = as.numeric(round(acct_age, 1)))
+
+
+spearman.acct <- cor.test(fig_df$med_rt, fig_df$followers_count)$estimate
+spearman.pval <- cor.test(fig_df$med_rt, fig_df$followers_count)$p.value
+
+
+ggplot(fig_df, aes(x = med_rt, y = followers_count)) + 
+  geom_point(aes(fill = acct_age, size = avg_daily_tweets), col = "black", pch = 21, alpha = 0.9) + 
+  geom_label_repel(
+    data          = fig_df %>% filter(med_rt > 20),
+    aes(label = screen_name),
+    nudge_y       = 50000,
+    segment.size  = 0.2,
+    segment.color = "grey50",
+    direction     = "x"
+  ) + 
+  geom_label_repel(
+    data          = fig_df %>% filter(med_rt == 1),
+    aes(label = screen_name),
+    nudge_y       = c(100000,150000,200000),
+    segment.size  = 0.2,
+    segment.color = "grey50",
+    direction     = "x"
+  ) + 
+  geom_label_repel(
+    data          = fig_df %>% filter(avg_daily_tweets ==12),
+    aes(label = screen_name),
+    nudge_y       = 50000,
+    nudge_x       = 5,
+    segment.size  = 0.2,
+    segment.color = "grey50",
+    direction     = "x"
+  ) + 
+  ylab("Number of followers") +
+  xlab("Median retweets of misper tweets") + 
+  scale_y_continuous(labels = comma) + 
+  theme_bw() +
+  theme(plot.title = element_text(size = 16, face = 'bold'),
+        axis.text.y = element_text(size = 10),
+        panel.grid.major = element_blank(),
+        panel.border = element_blank(),
+        axis.line = element_line(colour = "black")) + 
+  guides(fill = guide_legend(title = "Age of account (days)", 
+                             override.aes = list(size = 5), order = 1), 
+         size = guide_legend(title = "Number of daily tweets"), order = 2) +
+  scale_colour_gradient(low = "white", high = "black") + 
+  geom_text(aes(x = 10, y = 600000, 
+                label = paste0("Spearman's correlation: ", round(spearman.acct, 2))), 
+            check_overlap = T)
+
+```
+
+## Accounting for exposure time
+
+Finally, we include an exploratory multivariable associational model, in order to be able to account for some tweets having been online longer than others. Exposure time is measured in days elapsed since the tweet was created, and we use this variable as an offset (a constant term in the linear predictor which is not estimated), useful for measuring rate data (retweets per exposures (days)). 
+
+```{r poisson model}
+
+#relevel so no photo is reference for phototype
+misper_tweets$phototype <- relevel(misper_tweets$phototype, ref = "No photo")
+#replace "multiple people" tag in gender variable with NA
+misper_tweets$gender_coded <- ifelse(misper_tweets$gender_coded == "multippl", NA, misper_tweets$gender_coded)
+
+
+#poisson model, excluding tweets that are 0 days old
+po_combo_model_w_offset <- glm(formula = retweet_count ~ 
+                                 post_length +
+                                 useful_information_yn +
+                                 
+                                 ast_yn +
+                                 qm_yn +
+                                 exc_yn +
+                                 hasht_yn + 
+                                 
+                                 appeal +
+                                 aster +
+                                 concern +
+                                 hashmiss +
+                                 haveuseen + 
+                                 help +
+                                 highrisk +
+                                 link +
+                                 thx + 
+                                 oneohone +
+                                 origyn_2 +
+                                 plsrt +
+                                 urg +
+                                 
+                                 sent_score + 
+                                 sent_concerned +
+                                 sent_hopeless +
+                                 sent_hopeful + 
+                                 sent_neutral +
+                                 sent_neg +
+                                 sent_sad +
+                                 sent_scared +
+                                 sent_worried +
+                                 sent_wte +
+                                 
+                                 tone_coded +
+                                 
+                              #   image_quality_coded +
+                                 phototype +
+                                 race_coded +
+                                 gender_coded +
+                                 offset(log(diffdate)),
+                               data = misper_tweets %>% filter(diffdate != 0), family="poisson")
+
+
+pr <- sum(residuals(po_combo_model_w_offset, type="pearson")^2) # get Pearson Chi2
+pr_pv <- pchisq(pr, po_combo_model_w_offset$df.residual, lower=F) # calc p-value
+disp <- pr/po_combo_model_w_offset$df.residual # dispersion statistic
+obs_var <- sd(misper_tweets %>% filter(diffdate != 0) %>% pull(retweet_count))^2 # observed variance
+xbp <- predict(po_combo_model_w_offset) # xb, linear predictor
+mup <- exp(xbp) # mu, fitted Poisson
+exp_var <- mean(mup) # expected variance: mean=variance
+
+
+```
+
+
+The Poisson model shows evidence of overdispersion (Pearson Ch2 = `r pr`, Dispersion = `r disp`), further indicated by the observed variance (`r obs_var`) greatly exceeding the expected variance (`r exp_var`). Therefore we consider also a Poisson model with scaled standard error. The estimates for all variables from both models are illustrated in Figure 10.  
+
+```{r quasipoisson}
+
+#quasi poisson model, excluding tweets that are 0 days old
+qpo_combo_model_w_offset <- glm(formula = retweet_count ~ 
+                                 post_length +
+                                 useful_information_yn +
+                                  
+                                 ast_yn +
+                                 qm_yn +
+                                 exc_yn +
+                                 hasht_yn + 
+                                  
+                                 appeal +
+                                 aster +
+                                 concern +
+                                 hashmiss +
+                                 oneohone +
+                                 origyn_2 +
+                                 plsrt +
+                                 haveuseen + 
+                                 help +
+                                 highrisk +
+                                 link +
+                                 thx + 
+                                 urg +
+                                  
+                                 sent_score + 
+                                 sent_concerned +
+                                 sent_hopeless +
+                                 sent_hopeful + 
+                                 sent_neutral +
+                                  sent_neg + 
+                                 sent_sad +
+                                 sent_scared +
+                                 sent_worried +
+                                 sent_wte +
+                                  
+                                 tone_coded +
+                                  
+                              #    image_quality_coded +
+                                  phototype +
+                                 race_coded +
+                                 gender_coded +
+                                 offset(log(diffdate)),
+                               data = misper_tweets %>% filter(diffdate != 0), family="quasipoisson")
+
+```
+
+```{r fig10, fig.height= 7, fig.width= 6, fig.cap= "Figure 10: Multivariable models with offset"}
+p1 <- makeRegressionPlots(po_combo_model_w_offset)
+p2 <- makeRegressionPlots(qpo_combo_model_w_offset)
+
+p1$data$which <- "Poisson"
+p2$data$which <- "Overdispersed Poisson"
+
+both <- rbind(p1$data,p2$data)
+both$which <- factor(both$which, levels = c("Poisson", "Overdispersed Poisson"))
+
+
+
+ggplot(both, aes(x = estimate, y = term,
+                 colour= ifelse(estimate <1, "neg", "pos"))) + 
+  geom_point() + 
+  geom_segment(aes(x = conf.low, xend = conf.high, y = term, yend = term,
+                   colour= ifelse(estimate <1, "neg", "pos"))) + 
+  scale_colour_manual(values = c("#ca0020", "#0571b0"), labels = c("neg", "pos")) +
+  theme_bw() + 
+  geom_vline(aes(xintercept = 1), alpha = 0.8) + 
+  scale_x_log10(breaks = log_breaks(n = 5, base = 10)) + 
+  facet_grid(~which)+
+  theme(strip.background =element_rect(fill="white"), 
+        legend.position = "none")  + 
+  xlab("Incident Rate Ratio") + 
+  ylab("")
+
+```
+
+
+While it is common to interpret the incident rate ratios as estimates of effect size between the dependent variables (in this case tweet features) and independent variable (retweets), doing so can lead to mistaken interpretations of these estimates in line with the ‘Table 2 fallacy’ [@westreich2013table]. As we are not modeling causal relationships, we will not interpret the incidence rate ratios. Instead we will look only for sign change between the findings of our bivariate analyses and what we see from the two models above. Accounting for exposure time and including all features in a single model simultaneously does not seem to change our conclusions from the earlier descriptive findings for the following features: men still have fewer retweets, while white missing persons have more. Regular photos and multiple photos have more retweets. Rational tweets have fewer retweets than emotional. Templates that follow “have you seen…?”, contain a link, or ask to be retweeted have more retweets than tweets without these templates, while tweets using \*\*missing\*\* template have fewer retweets than those without this. However the estimates for the use of different punctuations (use of asterisk or question mark) change signs between the models and the bivariate analysis. Finally, worried, scared, willing to intervene, and hopeful tweets all remain positive (more retweets than those without these sentiments) while negative and hopeless tweets remain negative (fewer retweets than those without these sentiments). 
+
+
+# Discussion
+
+To explore how police tweet missing persons appeals and how the public engage with these, we analysed `r nrow(misper_tweets)` tweets made by GMP, using retweets as a measure  of engagement and spread. Our results constitute a first empirical insight into police appeals for information about missing persons made on Twitter, and public engagement with these appeals. We pick up below our key findings to discuss how current tweets are structured, and what factors should be considered when investigating what features might affect public engagement. 
+
+```{r outliers}
+iqr_rt <- IQR(misper_tweets$retweet_count)
+q3_rt <- quantile(misper_tweets$retweet_count)[4]
+out_vals = boxplot(misper_tweets$retweet_count, plot=FALSE)$out
+```
+
+Firstly we found that the majority of tweets receive very low engagement, with `r nrow(misper_tweets %>% filter(retweet_count < 2))/nrow(misper_tweets)*100`% (n = `r nrow(misper_tweets %>% filter(retweet_count < 2))`) of the tweets getting zero or one retweets. This suggests that there are some current strategies which receive very limited impact. On the other hand, there are quite a few tweets which receive much retweeting activity. `r length(out_vals)/nrow(misper_tweets)*100`% (n = `r length(out_vals)`) of tweets were considered as outliers (outside 1.5 times the interquartile range above the upper quartile), `r nrow(misper_tweets %>% filter(retweet_count >= q3_rt + (3*iqr_rt)))` of these are extreme outliers (outside 3 times the interquartile range above the upper quartile). Further work should explore in depth why so many tweets receive little to no engagement and what makes others “go viral”. 
+
+
+Our key focus is on features of tweets which can be acted upon by police and other organisations making these appeals. Below we draw some preliminary conclusions about what could be considered when writing Twitter appeals. One decision police make is to include a photo with the appeal, and what sort of photo to choose. We find in our sample that tweets with a regular photo or multiple photos had higher engagement than tweets with a custody photo, or tweets without any photo. This is in line with previous literature, which found an association between photo valence and retweeting [@sef15]. Another explanation is that a custody photo does not resonate with people on a personal level, something identified by previous work as important motivation for sharing [@jg19]. This is interesting but we must keep in mind that the appeal has many aims, one of which is to reach far and wide, while another is to contain valuable information to help identify the missing person. Therefore, a custody image might still be better than no image, as it will facilitate recognition of the missing person amongst those who do see the appeal. Regarding photo quality, we did not find more retweets with improved quality, but did find that the different in retweets between white and non-white men increases with each improvement in the quality of the photograph. 
+
+
+Nothing in our sample suggested that timing of tweet made a difference to retweeting. As we know that timeliness of information is crucial in missing persons investigations [@ss15] we suggest that appeals are made as early as possible, rather than trying to optimise the best time to tweet. 
+
+
+Considering which templates to use, tweets following the “have you seen…” template, tweets including a link, and tweets that ask followers to “please retweet” received more engagement. These could be interpreted as calls-to-action templates, which @l14 associated with increased engagement. Our findings on sentiment may be harder to implement, and we recognise that being mindful of the sentiment that a user might feel is a very difficult task, on top of trying to fit as much information as possible into a 280 character appeal, making this difficult to action. However, some results here might be easier to distinguish, for example how hopeful sentiment tweets in our sample got more and hopeless ones got fewer retweets.  An example of a tweet coded hopeful illustrates what such tweets might sound like: 
+
+> "FIRSTNAME LASTNAME. Missing from #LOCATION for 3 years.Today is his birthday. Have YOU seen this man? Please don't stop the RTs. LINK"
+
+
+On the other hand, an example of a tweet coded hopeless is: 
+
+> "FIRSTNAME LASTNAME has been missing for a year now LINK"
+
+It is possible that injecting ‘hope’ into these tweets can lead to more sharing. 
+
+
+The difference in engagement with rational versus emotional tweets has been highlighted by previous literature as something which affects retweets but with no clear consensus on how [@l14; @xz18]. In fact, we also find duality in our results. Overall it seems that in our sample emotional tweets have higher retweets than our rational tweets. However, when we separate out gender and ethnicity, we can notice that for tweets about white men and women, rational tone tweets have more retweets, but for non-white men and women, it is emotional tweets which do. 
+
+
+While the above presents an exciting empirical insight into police appeals for missing persons on social media, our study also has some limitations to keep in mind. First, we already mentioned about the data issues, in particular that selection into our sample requires that the tweet was not deleted, and this is likely to be related to features and outcome under study. This means that we have a biased sample. Not only that, but do not understand how this bias takes effect, since although posts about people who have returned to home are supposed to be taken down, we can see from our data that this is not always the case. Our results therefore are purely descriptive, and are meant as an indication into what sorts of characteristics of the features we identified through our literature review we even see in police tweets about missing persons. We recommend that future work considers a prospective study design, or employs a randomised control trial approach to be able to speak to the causal relationships between the features identified here, and public engagement. Clearly, there is an imperative to identify effective strategies so that we can help find missing persons as quickly and efficiently as possible. By employing a randomised control design we can collect robust evidence to identify causal mechanisms behind what works in promoting wide sharing and engagement with Twitter appeals. Longitudinal designs could allow insight into different temporal patterns in retweeting, rather than a final total retweets measure as we have here. This would allow us to employ causal inference methods to consider the time-varying features of the accounts as well, and answer questions such as: “as accounts gain more followers, do their tweets become more retweeted?”. Another limitation, which would not be addressed by the above study designs is that all these results are based on data from Twitter, and there are other social media platforms out there, to which these findings should ideally generalise. However, @jg19 found there not to be too much of a difference between those who use Facebook and Twitter to share information about missing people, so this may be a less serious issue. Finally, we have looked at engagement as an outcome measure, but future work could explore the effectiveness of these appeals in leading to valuable information or helping to locate the missing person, as well as the ethical implications and risks introduced by public sharing of missing people’s personally identifiable information on social media platforms. While wide sharing might be a desired outcome to help find the missing person, it can compound the problem of the limited scope the investigators have to withdraw the information they had released, once the person is found [@h16].  
+
+# Conclusion
+
+In this paper we explored appeals for information about missing persons made on Twitter by greater Manchester police. We did so in order to uncover how the police currently construct such appeals, and whether we can infer any structure in the practice. We find that there is some structure, but there is also variation in how these messages are crafted, as well as in other features such as the type and quality of photo used, the phrasing and punctuation used, and the perceived sentiment that results. We considered how engagement, measured as retweets varies between these differently structured tweets, and draw conclusions about what we think might be important to follow up. In particular we present exploratory results, which serve the basis for further confirmatory work. Therefore, the contribution of this paper is two-fold. First, we provide an insight into how appeals for information for missing people are shared by a major UK police force. We can see that although many of these messages follow a template, many others do not, and the choice of which template to follow, as well as other decisions around what information, images, or other features to include might have consequences for how the message is viewed and shared by audiences. By presenting the first look into these practices, our exploratory research serves as a foundation for future confirmatory work to build upon. In particular we have laid out a set of features which are used in missing persons appeals on social media that can inform studies with a prospective design, or experimental randomised control trial approach to further uncover causal relationships, and make recommendations for good practice in appeals for missing persons on Twitter from police, and other organisational accounts. Secondly, and relatedly, we serve as a reference point for an issue that is internationally relevant, affecting police and other organisations worldwide. Other countries with growing demand on their services from increasing numbers of people reported missing paired with restrictions on resources must also consider how to optimise their messages on social media so it reaches far and wide. This exploration is applicable and replicable in a way to inform more work internationally, with the ultimate aim to assist organisations and governments in safeguarding their vulnerable citizens.  
+
+
+# Acknowledgements
+
+This work was funded by the Manchester Statistical Society Campion Grant. All code was written in R (version 3.5.1) [@R-base], using the following packages: @R-dplyr, @R-ggplot2, @R-ggrepel, @R-knitr, @R-lubridate, @R-rmarkdown, @R-scales, and @R-tidyr. Code for this paper can be found on www.github.com/maczokni/misperTweetsCode. The authors would like to thank Aiden Sidebottom, Freya O'Brien, Joe Apps, Jane Hunter, Emily Moir, and Juanjo Medina for valuable comments on earlier drafts of this manuscript. 
+
+```{r}
+knitr::write_bib(c(.packages(), 'knitr', 'rmarkdown'), 'packages.bib')
+
+```
+
+
+# References
+
+
+
+
