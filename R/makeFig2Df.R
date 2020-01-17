@@ -12,7 +12,7 @@ makeFig2Df <- function(misper_tweets) {
     dplyr::group_by(image_quality_coded, race_coded, gender_coded) %>%
     dplyr::summarise(mean_rt = mean(retweet_count, na.rm = TRUE)) %>%
     tidyr::spread(race_coded, mean_rt) %>%
-    dplyr::select(-`<NA>`)  %>%
+    # dplyr::select(-`<NA>`)  %>%
     dplyr::rename(nw_mean = `non-white`,
            w_mean = white)
 
@@ -20,7 +20,7 @@ makeFig2Df <- function(misper_tweets) {
     dplyr::group_by(image_quality_coded, race_coded, gender_coded) %>%
     dplyr::summarise(median_rt = median(retweet_count, na.rm = TRUE)) %>%
     tidyr::spread(race_coded, median_rt) %>%
-    dplyr::select(-`<NA>`) %>%
+    # dplyr::select(-`<NA>`) %>%
     dplyr::rename(nw_median = `non-white`,
            w_median = white)
 
@@ -28,7 +28,7 @@ makeFig2Df <- function(misper_tweets) {
     dplyr::group_by(image_quality_coded, race_coded, gender_coded) %>%
     dplyr::summarise(num_tweets = n()) %>%
     tidyr::spread(race_coded, num_tweets) %>%
-    dplyr::select(-`<NA>`) %>%
+    # dplyr::select(-`<NA>`) %>%
     dplyr::rename(nw_count = `non-white`,
            w_count = white)
 
@@ -36,7 +36,7 @@ makeFig2Df <- function(misper_tweets) {
     dplyr::group_by(image_quality_coded, gender_coded, race_coded) %>%
     dplyr::summarise(low_qt = quantile(retweet_count, na.rm = T)[2]) %>%
     tidyr::spread(race_coded, low_qt) %>%
-    dplyr::select(-`<NA>`) %>%
+    # dplyr::select(-`<NA>`) %>%
     dplyr::rename(nw_lqt = `non-white`,
                   w_lqt = white)
 
@@ -44,7 +44,7 @@ makeFig2Df <- function(misper_tweets) {
     dplyr::group_by(image_quality_coded, gender_coded, race_coded) %>%
     dplyr::summarise(up_qt = quantile(retweet_count, na.rm = T)[4]) %>%
     tidyr::spread(race_coded, up_qt) %>%
-    dplyr::select(-`<NA>`) %>%
+    # dplyr::select(-`<NA>`) %>%
     dplyr::rename(nw_uqt = `non-white`,
                   w_uqt = white)
 
