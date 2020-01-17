@@ -28,19 +28,20 @@ makeRegressionPlots <- function(modeltoplot){
     p1$data$term <- ifelse(p1$data$term == "sent_concerned", "concerned", as.character(p1$data$term))
     p1$data$term <- ifelse(p1$data$term == "sent_score", "sentiment score", as.character(p1$data$term))
 
-    p1$data$term <- ifelse(p1$data$term == "origyn_2", "original phrasing", as.character(p1$data$term))
-    p1$data$term <- ifelse(p1$data$term == "plsrt", "please RT", as.character(p1$data$term))
+
     p1$data$term <- ifelse(p1$data$term == "aster", "**missing**", as.character(p1$data$term))
     p1$data$term <- ifelse(p1$data$term == "appeal", "...are appealing for...", as.character(p1$data$term))
+    p1$data$term <- ifelse(p1$data$term == "concern", "...are concerned for...", as.character(p1$data$term))
     p1$data$term <- ifelse(p1$data$term == "hashmiss", "#missing", as.character(p1$data$term))
+    p1$data$term <- ifelse(p1$data$term == "origyn_2", "original phrasing", as.character(p1$data$term))
+    p1$data$term <- ifelse(p1$data$term == "plsrt", "please RT", as.character(p1$data$term))
     p1$data$term <- ifelse(p1$data$term == "oneohone", "call 101", as.character(p1$data$term))
+    p1$data$term <- ifelse(p1$data$term == "help", "can you help", as.character(p1$data$term))
+    p1$data$term <- ifelse(p1$data$term == "highrisk", "high risk", as.character(p1$data$term))
+    p1$data$term <- ifelse(p1$data$term == "haveuseen", "have you seen...", as.character(p1$data$term))
     p1$data$term <- ifelse(p1$data$term == "urg", "urgent appeal", as.character(p1$data$term))
     p1$data$term <- ifelse(p1$data$term == "link", "link to info", as.character(p1$data$term))
     p1$data$term <- ifelse(p1$data$term == "thx", "thanks", as.character(p1$data$term))
-    p1$data$term <- ifelse(p1$data$term == "help", "can you help", as.character(p1$data$term))
-    p1$data$term <- ifelse(p1$data$term == "concern", "...are concerned for...", as.character(p1$data$term))
-    p1$data$term <- ifelse(p1$data$term == "highrisk", "high risk", as.character(p1$data$term))
-    p1$data$term <- ifelse(p1$data$term == "haveuseen", "have you seen...", as.character(p1$data$term))
 
     p1$data$term <- ifelse(p1$data$term == "tone_codedrational", "rational tone", as.character(p1$data$term))
 
@@ -48,15 +49,18 @@ makeRegressionPlots <- function(modeltoplot){
     p1$data$term <- ifelse(p1$data$term == "phototypeRegular photo", "regular photo", as.character(p1$data$term))
     p1$data$term <- ifelse(p1$data$term == "phototypeMuliple photos", "multiple photos", as.character(p1$data$term))
     p1$data$term <- ifelse(p1$data$term == "race_codedwhite", "white ethnic appearance", as.character(p1$data$term))
-    p1$data$term <- ifelse(p1$data$term == "gender_codedMale", "male", as.character(p1$data$term))
+    p1$data$term <- ifelse(p1$data$term == "gender_codedmale", "male", as.character(p1$data$term))
     p1$data$term <- ifelse(p1$data$term == "image_quality_codedbad", "bad image quality", as.character(p1$data$term))
     p1$data$term <- ifelse(p1$data$term == "image_quality_codedgood/excellent", "good/excellent image quality", as.character(p1$data$term))
 
     p1$data$term <- factor(p1$data$term, levels = c("post length", "contains useful info",
                                                     "contains asterisk", "contains question mark", "contains exclamation mark", "contains hashtag",
-                                                    "hopeful", "hopeless", "sad", "scared", "worried", "neutral", "negative", "willing to engage", "concerned", "sentiment score",
-                                                    "original phrasing", "please RT", "**missing**", "...are appealing for...", "#missing", "call 101", "urgent appeal", "link to info", "thanks", "can you help", "...are concerned for...", "high risk", "have you seen...",
-                                                    "rational tone", "bad image quality", "good/excellent image quality", "custody photo", "regular photo", "multiple photos", "white ethnic appearance", "male"))
+                                                    "hopeful", "hopeless", "sad", "scared", "worried", "neutral", "negative", "willing to engage",
+                                                    "concerned", "sentiment score", "original phrasing", "please RT", "**missing**",
+                                                    "...are appealing for...", "#missing", "call 101", "urgent appeal", "link to info",
+                                                    "thanks", "can you help", "...are concerned for...", "high risk", "have you seen...",
+                                                    "rational tone", "bad image quality", "good/excellent image quality", "custody photo",
+                                                    "regular photo", "multiple photos", "white ethnic appearance", "male"))
 
 
     ggplot2::ggplot(p1$data, ggplot2::aes(x = estimate, y = term)) +
