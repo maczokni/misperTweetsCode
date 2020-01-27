@@ -11,16 +11,17 @@ author:
     institute: uom2
 institute:
   - uom: School of Social Sciences, University of Manchester, UK
-  - uom2: Centre for Biostatistics, University of Manchester, UK
+  - uom2: Centre for Biostatistics, Manchester Academic Health Science Centre, Division of Population Health, Health Services Research and Primary Care
 date: ""
 output: 
   word_document:
+    reference_docx: TF_Template_Word_Windows_2016.dotx
     toc: no
     pandoc_args:
       - '--lua-filter=scholarly-metadata.lua'
       - '--lua-filter=author-info-blocks.lua'
   pdf_document: 
-    number_sections: no
+    number_sections: FALSE
     toc: no
     pandoc_args:
       - '--lua-filter=scholarly-metadata.lua'
@@ -68,7 +69,7 @@ In what follows, we consider the available literature on what is known about the
 
 Police forces across the globe have been making increasing use of social media platforms such as Youtube, Facebook, and Twitter [@c11; @dhtgg17].  As consumers, they benefit from members of the public sharing information [@ehha]. As content creators, police benefit from increased accessibility and in cases even improved reputation in local communities [@fca14]. However social media can also be perceived to contain a lot of disinformation and may foster uncertainty [@kwon2016social], so it is important that police use social media in a way that fosters engagement and trust. In fact, some research findings suggest that the quality of a police department’s media image might have more to do with how they present themselves (including on social media) than with the actual crime rates in their municipality [@l01]. 
 
-There is a lot of variation in how the police use social media (@c11). While some guidance exists (eg in the UK the Association for Chief of Police have produced a ‘Guidelines on the Safe use of the Internet and Social Media’ [@acpo2013], their implementation is far from uniform across (or even within) forces. In a study comparing Greater Manchester Police (GMP) and London Metropolitan Police (Met) using Twitter during the 2011 riots, @dbk13 identified differences such as using an instrumental versus an effective tone, or replying to tips from the public with a ‘thanks’ (GMP) or not (Met). As a result, people favoured the way in which GMP handled communication, and responded less to the approach taken by the Met. This manifested not only in discussion but also in directly measurable outcomes such as number of followers [@dbk13]. @c11 identified a UK based typology for police Twitter accounts: ‘broadcasters’ (who share information), ‘local knowledge gatherers’ (who share information), and ‘community facilitators’ (who foster dialogue). Such typologies exist internationally;  research in the United States has identified different strategies between forces depending on whether they used it to broadcast, collect intelligence, or for communication and engagement [@mt13]. Clearly there are many strategies to social media use by police and its important that we understand how these apply to missing appeals and public engagement.
+There is a lot of variation in how the police use social media [@c11]. While some guidance exists (eg in the UK the Association for Chief of Police have produced a ‘Guidelines on the Safe use of the Internet and Social Media’ [@acpo2013], their implementation is far from uniform across (or even within) forces. In a study comparing Greater Manchester Police (GMP) and London Metropolitan Police (Met) using Twitter during the 2011 riots, @dbk13 identified differences such as using an instrumental versus an effective tone, or replying to tips from the public with a ‘thanks’ (GMP) or not (Met). As a result, people favoured the way in which GMP handled communication, and responded less to the approach taken by the Met. This manifested not only in discussion but also in directly measurable outcomes such as number of followers [@dbk13]. @c11 identified a UK based typology for police Twitter accounts: ‘broadcasters’ (who share information), ‘local knowledge gatherers’ (who share information), and ‘community facilitators’ (who foster dialogue). Such typologies exist internationally;  research in the United States has identified different strategies between forces depending on whether they used it to broadcast, collect intelligence, or for communication and engagement [@mt13]. Clearly there are many strategies to social media use by police and its important that we understand how these apply to missing appeals and public engagement.
 
 
 
@@ -107,16 +108,8 @@ litsum <- data.frame(Element = c("Features of the missing person", "Features of 
                                 "Time and timeliness, Post length, Punctuation and hashtags, Templates, Sentiment, Tone, Useful information, Photo (presence and valence)",
                                 "Number of followers, Age of account, Tweeting activity, Trusted source"))
 
-knitr::kable(litsum, caption = "Table 1: features in the literature")
-
-
+knitr::kable(litsum, caption = "Table 1: features in the literature") 
 ```
-
-
-
-
-
-
 
 
 # Methods
@@ -233,8 +226,21 @@ All data wrangling, analysis, and visualisation was done in R (version 3.6.1) an
 
 ```{r summary}
 
-misper_tweets <- read.csv("misper_tweets_coded.csv")
-misper_tweets <- cleanMisperData(misper_tweets)
+# misper_tweets <- read.csv("misper_tweets_coded.csv")
+# misper_tweets <- misper_tweets %>% select(n, user_id ,created_at, screen_name, text, favorite_count, retweet_count, hashtags, followers_count, friends_count, listed_count, statuses_count, favourites_count, account_created_at, sentiment, hashtag_type, image_type, image_quality, tone_type_of_appeal, originiality, useful_information, age_text, age_picture, gender_text, gender_picture, race_text, race_picture)
+# misper_tweets <- cleanMisperData(misper_tweets)
+
+
+misper_tweets <- read.csv("clean_anon_misper_tweets.csv")
+
+  misper_tweets$ast_yn <- as.factor(ifelse(misper_tweets$numast >0, 1, 0))
+  misper_tweets$qm_yn <- as.factor(ifelse(misper_tweets$numqm >0, 1, 0))
+  misper_tweets$exc_yn <- as.factor(ifelse(misper_tweets$numexc >0, 1, 0))
+  misper_tweets$hasht_yn <- as.factor(ifelse(misper_tweets$numhash >0, 1, 0))
+
+    #get hour
+  misper_tweets$tw_hour <- as.factor(lubridate::hour(misper_tweets$date))
+
 
 ```
 
@@ -285,7 +291,7 @@ knitr::kable(misper_tweets %>%
 ```
 
 
-Figure 1 shows the relationship between photo type and retweet count, taking into account gender and ethnic appearance.  
+Figure 1 shows the relationship between photo type and retweet count, taking into account gender and ethnic appearance. We include with all figures, error bars, which show the interquartile range (IQR).   
 
 ```{r figure1, fig.height= 7, fig.width= 8, fig.cap= "Figure 1: Retweets for different image types by gender and ethnic appearance"}
 
@@ -333,9 +339,6 @@ ggplot(fig2_df, aes(x = w_median, y =image_quality_coded)) +
   geom_point(aes(x = nw_median, fill = "Non-white", size = nw_count), pch = 21, col = "black", position = position_nudge(y = -0.05)) +
   scale_fill_manual(values = c("#8A5C7B", "white"), labels = c("Non-white", "White")) + 
   scale_alpha_continuous(guide = F) +
-  # labs(title = "Do different quality images have more retweets?",
-  #      subtitle = ".",
-  #      caption = "Data: 1008 Twitter appeals for missing persons by Greater Manchester Police Twitter accounts\ncontact: @r_solymosi") +
   xlab("Median retweet count") +  
   ylab("Photo quality")+ 
   theme_bw() + 
@@ -405,7 +408,7 @@ ggplot() +
 #define cutoff date when twitter character limit changed from 140 to 280
 cutoffdate <- ymd("2017-11-07")
 #create dichotomous variable if tweet is before/after character limit change
-misper_tweets$date_prepost <- ifelse(misper_tweets$date > cutoffdate, "post", "pre") 
+misper_tweets$date_prepost <- ifelse(ymd_hms(misper_tweets$date) > cutoffdate, "post", "pre") 
 
 #relevel
 misper_tweets$date_prepost <- factor(misper_tweets$date_prepost, levels = c("pre", "post"))
@@ -825,7 +828,7 @@ Finally, we include an exploratory multivariable associational model, in order t
 #relevel so no photo is reference for phototype
 misper_tweets$phototype <- relevel(misper_tweets$phototype, ref = "No photo")
 #replace "multiple people" tag in gender variable with NA
-misper_tweets$gender_coded <- ifelse(misper_tweets$gender_coded == "multippl", NA, misper_tweets$gender_coded)
+misper_tweets$gender_coded <- ifelse(as.character(misper_tweets$gender_coded) == "multippl", NA, as.character(misper_tweets$gender_coded))
 
 
 #poisson model, excluding tweets that are 0 days old
