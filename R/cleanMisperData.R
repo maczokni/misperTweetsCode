@@ -35,7 +35,7 @@ cleanMisperData <- function(misper_tweets){
                                        misper_tweets$race_picture == "N.P", NA, misper_tweets$race_coded)
 
   misper_tweets$race_coded <- ifelse(is.na(misper_tweets$race_coded) & grepl("whi", misper_tweets$race_text), "white", misper_tweets$race_coded)
-  l  <- c("African",    "asian",      "black",      "greek",      "indian",     "mixed",      "mixed race", "mixed-race", "polish", "vietnamese")
+  l  <- c("African",    "asian",      "black",      "greek",      "indian",     "mixed",      "mixed race", "mixed-race", "vietnamese")
   misper_tweets$race_coded <- ifelse(is.na(misper_tweets$race_coded) &
                                        misper_tweets$race_text %in% l, "non-white", misper_tweets$race_coded)
 
