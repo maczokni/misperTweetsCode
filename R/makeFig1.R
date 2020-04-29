@@ -7,8 +7,8 @@ makeFig1 <- function(fig_df) {
     ggplot2::geom_errorbarh(data = fig_df, aes(x = nw_median, y = phototype, xmin = nw_lqt, xmax =  nw_uqt), height = 0.1, lwd = 0.5, col = "#8A5C7B", alpha = 1, position = position_nudge(y = -0.05)) +
     ggplot2::geom_errorbarh(data = fig_df, aes(x =  w_median, y = phototype, xmin = w_lqt, xmax =  w_uqt), height = 0.1, lwd = 0.5, col = "black", alpha = 1, position = position_nudge(y = 0.05)) +
     ggplot2::geom_point(aes(fill = "White", size = w_count), pch = 21, col = "black", position = position_nudge(y = 0.05)) +
-    ggplot2::geom_point(aes(x = nw_median, fill = "POC", size = nw_count), pch = 21, col = "black", position = position_nudge(y = -0.05)) +
-    ggplot2::scale_fill_manual(values = c("#8A5C7B", "white"), labels = c("POC", "White")) +
+    ggplot2::geom_point(aes(x = nw_median, fill = "Ethnic minority", size = nw_count), pch = 21, col = "black", position = position_nudge(y = -0.05)) +
+    ggplot2::scale_fill_manual(values = c("#8A5C7B", "white"), labels = c("Ethnic minority", "White")) +
     ggplot2::scale_alpha_continuous(guide = F) +
     ggplot2::labs(title = "",
          subtitle = "",
