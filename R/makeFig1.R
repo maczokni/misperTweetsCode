@@ -2,6 +2,8 @@
 
 makeFig1 <- function(fig_df) {
 
+  fig_df$phototype <- factor(fig_df$phototype, levels = c("No photo", "Custody photo", "Regular photo", "Muliple photos"))
+
   figure.1 <- ggplot2::ggplot(fig_df, aes(x = w_median, y = phototype)) +
     ggplot2::facet_wrap( ~ gender_coded) +
     ggplot2::geom_errorbarh(data = fig_df, aes(x = nw_median, y = phototype, xmin = nw_lqt, xmax =  nw_uqt), height = 0.1, lwd = 0.5, col = "#8A5C7B", alpha = 1, position = position_nudge(y = -0.05)) +
